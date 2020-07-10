@@ -1,0 +1,9 @@
+#conda create -n env_pypickle python=3.6
+#conda activate env_pypickle
+#conda install spyder
+
+wget
+matplotlib 
+numpy 
+pandas 
+tqdm

@@ -1,0 +1,2 @@
+include pypickle/data/*.zip
+include pypickle/data/*.txt
