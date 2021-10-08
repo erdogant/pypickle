@@ -6,6 +6,8 @@ rm -rf __pycache__
 rm -rf .pytest_cache
 rm -rf .pylint.d
 rm -rf pypickle/data/*.zip
+rm -rf pypickle/__pycache__
 rm -rf *.js
 rm -rf *.html
 rm -rf *.css
+rm -rf *.pkl
