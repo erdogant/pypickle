@@ -3,9 +3,10 @@
 [![Python](https://img.shields.io/pypi/pyversions/pypickle)](https://img.shields.io/pypi/pyversions/pypickle)
 [![PyPI Version](https://img.shields.io/pypi/v/pypickle)](https://pypi.org/project/pypickle/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/erdogant/pypickle/blob/master/LICENSE)
-[![Coffee](https://img.shields.io/badge/coffee-black-grey.svg)](https://erdogant.github.io/donate/?currency=USD&amount=5)
+[![BuyMeCoffee](https://img.shields.io/badge/buymea-coffee-brown.svg)](https://www.buymeacoffee.com/erdogant)
 [![Downloads](https://pepy.tech/badge/pypickle/month)](https://pepy.tech/project/pypickle/month)
 [![Downloads](https://pepy.tech/badge/pypickle)](https://pepy.tech/project/pypickle)
+<!---[![Coffee](https://img.shields.io/badge/coffee-black-grey.svg)](https://erdogant.github.io/donate/?currency=USD&amount=5)-->
 
 
 * pypickle is for saving and loading files in pickle format.
