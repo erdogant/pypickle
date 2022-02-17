@@ -12,6 +12,10 @@
 
 * pypickle is for saving and loading files in pickle format.
 
+# 
+**Star this repo if you like it! ⭐️**
+#
+
 ### Installation
 * Install pypickle from PyPI (recommended). pypickle is compatible with Python 3.6+ and runs on Linux, MacOS X and Windows. 
 
