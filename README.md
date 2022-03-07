@@ -3,23 +3,28 @@
 [![Python](https://img.shields.io/pypi/pyversions/pypickle)](https://img.shields.io/pypi/pyversions/pypickle)
 [![PyPI Version](https://img.shields.io/pypi/v/pypickle)](https://pypi.org/project/pypickle/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/erdogant/pypickle/blob/master/LICENSE)
-[![Downloads](https://pepy.tech/badge/pypickle/month)](https://pepy.tech/project/pypickle/month)
 [![Downloads](https://pepy.tech/badge/pypickle)](https://pepy.tech/project/pypickle)
+[![Downloads](https://pepy.tech/badge/pypickle/month)](https://pepy.tech/project/pypickle/)
 [![DOI](https://zenodo.org/badge/278702058.svg)](https://zenodo.org/badge/latestdoi/278702058)
 [![Sphinx](https://img.shields.io/badge/Sphinx-Docs-Green)](https://erdogant.github.io/pypickle/)
 <!---[![Coffee](https://img.shields.io/badge/coffee-black-grey.svg)](https://erdogant.github.io/donate/?currency=USD&amount=5)-->
 <!---[![BuyMeCoffee](https://img.shields.io/badge/buymea-coffee-yellow.svg)](https://www.buymeacoffee.com/erdogant)-->
 
 
-* pypickle is for saving and loading files in pickle format.
+* pypickle is for saving data and loading the files in pickle format.
 
 # 
-**Star this repo if you like it! ⭐️**
-#
+**⭐️ Star this repo if you like it ⭐️**
+# 
 
-### Installation
-* Install pypickle from PyPI (recommended). pypickle is compatible with Python 3.6+ and runs on Linux, MacOS X and Windows. 
 
+### [Documentation pages](https://erdogant.github.io/pypickle/)
+
+On the [documentation pages](https://erdogant.github.io/pypickle/) you can find more information about ``pypickle`` with examples. 
+
+# 
+
+##### Install bnlearn from PyPI
 ```bash
 pip install pypickle     # normal install
 pip install -U pypickle  # update if needed
@@ -30,16 +35,27 @@ pip install -U pypickle  # update if needed
 import pypickle
 ```
 
-#### Example:
+#
+
+#### [Example: Saving](https://erdogant.github.io/pypickle/pages/html/Save_and_Load.html#saving)
+
 ```python
 import pypickle
-filepath = 'tes1t.pkl'
+filepath = 'test.pkl'
 
 # Some data
 data = [1,2,3,4,5]
 
 # Save
 status = pypickle.save(filepath, data)
+
+```
+
+#
+
+#### [Example: Loading](https://erdogant.github.io/pypickle/pages/html/Save_and_Load.html#loading)
+
+```python
 
 # Load file
 data = pypickle.load(filepath)
