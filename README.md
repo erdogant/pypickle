@@ -11,15 +11,20 @@
 <!---[![BuyMeCoffee](https://img.shields.io/badge/buymea-coffee-yellow.svg)](https://www.buymeacoffee.com/erdogant)-->
 
 
-* pypickle is for saving and loading files in pickle format.
+* pypickle is for saving data and loading the files in pickle format.
 
 # 
-**Star this repo if you like it! ⭐️**
-#
+**⭐️ Star this repo if you like it ⭐️**
+# 
 
-### Installation
-* Install pypickle from PyPI (recommended). pypickle is compatible with Python 3.6+ and runs on Linux, MacOS X and Windows. 
 
+### [Documentation pages](https://erdogant.github.io/pypickle/)
+
+On the [documentation pages](https://erdogant.github.io/pypickle/) you can find more information about ``pypickle`` with examples. 
+
+# 
+
+##### Install bnlearn from PyPI
 ```bash
 pip install pypickle     # normal install
 pip install -U pypickle  # update if needed
@@ -30,10 +35,18 @@ pip install -U pypickle  # update if needed
 import pypickle
 ```
 
-#### Example:
+#
+
+### [Example: Saving](https://erdogant.github.io/pypickle/pages/html/Save_and_Load.html#saving)
+
+#
+
+### [Example: Loading](https://erdogant.github.io/pypickle/pages/html/Save_and_Load.html#loading)
+
+
 ```python
 import pypickle
-filepath = 'tes1t.pkl'
+filepath = 'test.pkl'
 
 # Some data
 data = [1,2,3,4,5]
