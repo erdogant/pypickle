@@ -37,12 +37,7 @@ import pypickle
 
 #
 
-### [Example: Saving](https://erdogant.github.io/pypickle/pages/html/Save_and_Load.html#saving)
-
-#
-
-### [Example: Loading](https://erdogant.github.io/pypickle/pages/html/Save_and_Load.html#loading)
-
+#### [Example: Saving](https://erdogant.github.io/pypickle/pages/html/Save_and_Load.html#saving)
 
 ```python
 import pypickle
@@ -53,6 +48,14 @@ data = [1,2,3,4,5]
 
 # Save
 status = pypickle.save(filepath, data)
+
+```
+
+#
+
+#### [Example: Loading](https://erdogant.github.io/pypickle/pages/html/Save_and_Load.html#loading)
+
+```python
 
 # Load file
 data = pypickle.load(filepath)
