@@ -17,7 +17,7 @@ Content
 
 .. toctree::
   :maxdepth: 1
-  :caption: Methods
+  :caption: Tutorials
 
   Save_and_Load
 

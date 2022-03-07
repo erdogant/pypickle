@@ -1,9 +1,5 @@
-.. _code_directive:
-
--------------------------------------
-
 Coding quality
-'''''''''''''''''''''
+###############
 
 I value software quality. Higher quality software has fewer defects, better security, and better performance, which leads to happier users who can work more effectively.
 Code reviews are an effective method for improving software quality. McConnell (2004) suggests that unit testing finds approximately 25% of defects, function testing 35%, integration testing 45%, and code review 55-60%. 
@@ -14,7 +10,7 @@ Such conventions are helpfull to improve the quality, make the code cleaner and 
 
 
 library
--------
+**************
 
 The file structure of the generated package looks like:
 
@@ -48,7 +44,7 @@ The file structure of the generated package looks like:
 
 
 Style
------
+********
 
 This library is compliant with the PEP-8 standards.
 PEP stands for Python Enhancement Proposal and sets a baseline for the readability of Python code.
@@ -56,7 +52,7 @@ Each public function contains a docstring that is based on numpy standards.
     
 
 Complexity
-----------
+****************
 
 This library has been developed by using measures that help decreasing technical debt.
 Developing software with low(er) technical dept may take extra development time, but has many advantages:
@@ -68,7 +64,8 @@ Developing software with low(er) technical dept may take extra development time,
 
 
 Unit tests
-----------
+****************
+
 
 The use of unit tests is essential to garantee a consistent output of developed functions.
 The following tests are secured using :func:`tests.test_pypickle`:
