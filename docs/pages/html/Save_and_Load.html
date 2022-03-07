@@ -59,7 +59,6 @@
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html">Sponsor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html#github">Github</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Coding%20quality.html">Coding quality</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pypickle.pypickle.html">API References</a></li>
 </ul>
 
     <a href= "genindex.html">Index</a>
@@ -94,7 +93,7 @@
 </section>
 <section id="store-types-of-data">
 <h1>Store types of data<a class="headerlink" href="#store-types-of-data" title="Permalink to this headline"></a></h1>
-<p>You can <code class="docutils literal notranslate"><span class="pre">pypickle</span></code> the underneath data types but it is also possible to pickle classes and functions.</p>
+<p>You can <code class="docutils literal notranslate"><span class="pre">ismember</span></code> the underneath data types but it is also possible to pickle classes and functions.</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>Booleans</p></li>
@@ -112,33 +111,33 @@
 </section>
 <section id="saving">
 <h1>Saving<a class="headerlink" href="#saving" title="Permalink to this headline"></a></h1>
-<p>The pypickle module serializes objects so they can be saved to a file, and loaded in a program again later on.
-There are many types that can be saved, such as dictionaries, DataFrames, lists, etc. Saving can be performed using <a class="reference internal" href="pypickle.pypickle.html#pypickle.pypickle.save" title="pypickle.pypickle.save"><code class="xref py py-func docutils literal notranslate"><span class="pre">pypickle.pypickle.save()</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pypickle</span>
+<p>The ismember module serializes objects so they can be saved to a file, and loaded in a program again later on.
+There are many types that can be saved, such as dictionaries, DataFrames, lists, etc. Saving can be performed using <code class="xref py py-func docutils literal notranslate"><span class="pre">ismember.ismember.save()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ismember</span>
 <span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;test.pkl&#39;</span>
 
 <span class="c1"># Some data in a list</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
 
 <span class="c1"># Save</span>
-<span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">ismember</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="loading">
 <h1>Loading<a class="headerlink" href="#loading" title="Permalink to this headline"></a></h1>
-<p>Loading a pickled file can performed using the function <a class="reference internal" href="pypickle.pypickle.html#pypickle.pypickle.load" title="pypickle.pypickle.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">pypickle.pypickle.load()</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pypickle</span>
+<p>Loading a pickled file can performed using the function <code class="xref py py-func docutils literal notranslate"><span class="pre">ismember.ismember.load()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ismember</span>
 <span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;test.pkl&#39;</span>
 
 <span class="c1"># Some data in a list</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
 
 <span class="c1"># Save</span>
-<span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">ismember</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
 <span class="c1"># Load file</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">ismember</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>[1] <a class="reference external" href="https://www.datacamp.com/community/tutorials/pickle-python-tutorial">https://www.datacamp.com/community/tutorials/pickle-python-tutorial</a></p>

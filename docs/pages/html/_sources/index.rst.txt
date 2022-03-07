@@ -1,7 +1,7 @@
-pypickle's documentation!
+ismember's documentation!
 ==========================
 
-``pypickle`` is a Python library for saving and loading files in pickle format.
+``ismember`` is a Python library for saving and loading files in pickle format.
 
 
 
@@ -28,7 +28,7 @@ Content
   
   Documentation
   Coding quality
-  pypickle.pypickle
+  ismember.ismember
 
 * :ref:`genindex`
 
@@ -38,7 +38,7 @@ Quick install
 
 .. code-block:: console
 
-   pip install pypickle
+   pip install ismember
 
 
 
@@ -47,13 +47,13 @@ Github
 ------------------------------
 
 Please report bugs, issues and feature extensions there.
-Github, `erdogant/pypickle <https://github.com/erdogant/pypickle/>`_.
+Github, `erdogant/ismember <https://github.com/erdogant/ismember/>`_.
 
 
-Citing *pypickle*
+Citing *ismember*
 -----------------------
 
-The bibtex can be found in the right side menu at the `github page <https://github.com/erdogant/pypickle/>`_.
+The bibtex can be found in the right side menu at the `github page <https://github.com/erdogant/ismember/>`_.
 
 
 Sponsor this project
