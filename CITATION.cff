@@ -14,7 +14,7 @@ keywords:
   - "python"
 license: "MIT"
 message: "If you use this software, please cite it using these metadata."
-repository-code: "https://github.com/erdogant/pypickle"
+repository-code: "https://erdogant.github.io/pypickle"
 title: "pypickle is for saving and loading files in pickle format."
 version: "0.1.1"
 ...
