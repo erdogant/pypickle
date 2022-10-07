@@ -7,7 +7,7 @@ Pickling is useful for applications where you need some degree of persistency in
 Store types of data
 ###########################
 
-You can ``ismember`` the underneath data types but it is also possible to pickle classes and functions.
+You can ``pypickle`` the underneath data types but it is also possible to pickle classes and functions.
 
 	* Booleans
 	* Integers
@@ -25,40 +25,40 @@ Not everything can be pickled (easily), though: examples of this are generators,
 Saving
 #########
 
-The ismember module serializes objects so they can be saved to a file, and loaded in a program again later on.
-There are many types that can be saved, such as dictionaries, DataFrames, lists, etc. Saving can be performed using :func:`ismember.ismember.save`:
+The pypickle module serializes objects so they can be saved to a file, and loaded in a program again later on.
+There are many types that can be saved, such as dictionaries, DataFrames, lists, etc. Saving can be performed using :func:`pypickle.pypickle.save`:
 
 .. code:: python
 
-	import ismember
+	import pypickle
 	filepath = 'test.pkl'
 
 	# Some data in a list
 	data = [1,2,3,4,5]
 
 	# Save
-	status = ismember.save(filepath, data)
+	status = pypickle.save(filepath, data)
 
 
 
 Loading
 #########
 
-Loading a pickled file can performed using the function :func:`ismember.ismember.load`:
+Loading a pickled file can performed using the function :func:`pypickle.pypickle.load`:
 
 .. code:: python
 
-	import ismember
+	import pypickle
 	filepath = 'test.pkl'
 
 	# Some data in a list
 	data = [1,2,3,4,5]
 
 	# Save
-	status = ismember.save(filepath, data)
+	status = pypickle.save(filepath, data)
 
 	# Load file
-	data = ismember.load(filepath)
+	data = pypickle.load(filepath)
 
 
 

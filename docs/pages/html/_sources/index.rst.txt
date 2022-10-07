@@ -40,7 +40,7 @@ Content
   
   Documentation
   Coding quality
-  ismember.ismember
+  pypickle.pypickle
 
 
 Indices and tables
