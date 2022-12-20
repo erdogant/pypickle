@@ -9,10 +9,11 @@
 
 import pickle
 import os
+import re
 
 
 # %% Save pickle file
-def save(filepath, var, overwrite=False, fix_imports=True, verbose=3):
+def save(filepath: str, var, overwrite: bool = False, fix_imports: bool = True, verbose: int = 3):
     """Save pickle file for input variables.
 
     Parameters
@@ -35,7 +36,7 @@ def save(filepath, var, overwrite=False, fix_imports=True, verbose=3):
     Example
     -------
     >>> import pypickle
-    >>> filepath = './temp/tes1t.pkl'
+    >>> filepath = './temp/test.pkl'
     >>> data = [1,2,3,4,5]
     >>> status = pypickle.save(filepath, data)
 
@@ -58,12 +59,12 @@ def save(filepath, var, overwrite=False, fix_imports=True, verbose=3):
         out=True
     else:
         if verbose>=3: print('[pypickle] Pickle file could not be saved: [%s]' %filepath)
-    return(out)
+    return out
 
 
 # %% Load pickle file
-def load(filepath, fix_imports=True, encoding="ASCII", errors="strict", verbose=3):
-    """Loading pickle files for input variables.
+def load(filepath: str, fix_imports: bool = True, encoding: str = "ASCII", errors: str = "strict", verbose: int = 3):
+    """Load pickle files for input variables.
 
     Parameters
     ----------
@@ -86,7 +87,7 @@ def load(filepath, fix_imports=True, encoding="ASCII", errors="strict", verbose=
     Example
     -------
     >>> import pypickle
-    >>> filepath = 'tes1t.pkl'
+    >>> filepath = 'test.pkl'
     >>> data = [1,2,3,4,5]
     >>> status = pypickle.save(filepath, data)
     >>> # Load file
@@ -101,4 +102,37 @@ def load(filepath, fix_imports=True, encoding="ASCII", errors="strict", verbose=
         out = pickle.load(pickle_off, fix_imports=fix_imports, encoding=encoding, errors=errors)
     else:
         if verbose>=3: print('[pypickle] Pickle file does not exists: [%s]' %filepath)
-    return(out)
+    return out
+
+
+# %% Clean filename
+def clean(filename: str) -> str:
+    """Clean the filename to make sure the file can be saved on disk.
+
+    Description
+    -----------
+    The following characters are replaced from the filename: '&', ',', '?', '$', '!' '/', '\' with character: '_'
+
+    Parameters
+    ----------
+    filename : str
+        Filename.
+
+    Returns
+    -------
+    TYPE: str
+        filename
+
+    Example
+    -------
+    >>> import pypickle
+    >>> filename = 't/st.pkl'
+    >>> data = [1,2,3,4,5]
+    >>> filename = pypickle.clean(filename)
+    >>> # Save
+    >>> status = pypickle.save(filename, data)
+    >>> # Load file
+    >>> data = pypickle.load(filepath)
+
+    """
+    return re.sub(r'[|&|,|?|$|!|/|\\]', r'_', filename)
