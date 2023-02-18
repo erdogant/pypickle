@@ -1,3 +1,5 @@
+.. include:: add_top.add
+
 What is pickling?
 ###########################
 
@@ -65,10 +67,6 @@ Loading a pickled file can performed using the function :func:`pypickle.pypickle
 [1] https://www.datacamp.com/community/tutorials/pickle-python-tutorial
 
 
-.. raw:: html
 
-	<hr>
-	<center>
-		<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
-	</center>
-	<hr>
+
+.. include:: add_bottom.add
