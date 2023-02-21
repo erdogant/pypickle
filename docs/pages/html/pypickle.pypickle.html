@@ -17,6 +17,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -59,7 +60,12 @@
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html">Sponsor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html#github">Github</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Coding%20quality.html">Coding quality</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API References</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.clean"><code class="docutils literal notranslate"><span class="pre">clean()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
     <a href= "genindex.html">Index</a>
@@ -88,29 +94,28 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <hr>
-<center>
-        <script async src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
-        <div data-ea-publisher="erdogantgithubio" data-ea-type="text"></div>
-        <!-- <div data-ea-publisher="erdogantgithubio" data-ea-type="text" data-ea-style="fixedfooter"></div> -->
-</center>
-<hr><section id="module-pypickle.pypickle">
+  <section id="module-pypickle.pypickle">
 <span id="api-references"></span><h1>API References<a class="headerlink" href="#module-pypickle.pypickle" title="Permalink to this heading"></a></h1>
 <p>pypickle is to save and load variables in/from pickle files.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pypickle.pypickle.clean">
 <span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pypickle.pypickle.clean" title="Permalink to this definition"></a></dt>
 <dd><p>Clean the filename to make sure the file can be saved on disk.</p>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
 <p>The following characters are replaced from the filename: ‘&amp;’, ‘,’, ‘?’, ‘$’, ‘!’ ‘/’, ‘’ with character: ‘_’</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Filename.</p>
+<dt class="field-odd">param filename</dt>
+<dd class="field-odd"><p>Filename.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>TYPE</strong> – filename</p>
+<dt class="field-even">type filename</dt>
+<dd class="field-even"><p>str</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>str</p>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p><strong>TYPE</strong> – filename</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>str</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
@@ -124,6 +129,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
 </pre></div>
 </div>
+</section>
 </dd></dl>
 
 <dl class="py function">

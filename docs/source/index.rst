@@ -3,8 +3,6 @@ pypickle's documentation!
 
 |python| |pypi| |docs| |stars| |LOC| |downloads_month| |downloads_total| |license| |forks| |open issues| |project status| |repo-size| |donate|
 
-.. include:: add_top.add
-
 
 ``pypickle`` is a Python library for saving and loading files in pickle format.
 
