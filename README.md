@@ -2,6 +2,7 @@
 
 [![Python](https://img.shields.io/pypi/pyversions/pypickle)](https://img.shields.io/pypi/pyversions/pypickle)
 [![PyPI Version](https://img.shields.io/pypi/v/pypickle)](https://pypi.org/project/pypickle/)
+![GitHub Repo stars](https://img.shields.io/github/stars/erdogant/pypickle)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/erdogant/pypickle/blob/master/LICENSE)
 [![Downloads](https://pepy.tech/badge/pypickle)](https://pepy.tech/project/pypickle)
 [![Downloads](https://pepy.tech/badge/pypickle/month)](https://pepy.tech/project/pypickle/)
