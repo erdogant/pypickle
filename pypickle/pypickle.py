@@ -110,7 +110,7 @@ def load(filepath: str, fix_imports: bool = True, encoding: str = "ASCII", error
     """
     out = None
     if os.path.isfile(filepath):
-        logger.info(f'[pypickle] Pickle file loaded: {filepath}')
+        logger.info(f'Pickle file loaded: {filepath}')
         pickle_off = open(filepath, "rb")
         out = pickle.load(pickle_off, fix_imports=fix_imports, encoding=encoding, errors=errors)
     else:
