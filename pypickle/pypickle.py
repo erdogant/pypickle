@@ -114,7 +114,7 @@ def load(filepath: str, fix_imports: bool = True, encoding: str = "ASCII", error
         pickle_off = open(filepath, "rb")
         out = pickle.load(pickle_off, fix_imports=fix_imports, encoding=encoding, errors=errors)
     else:
-        logger.info(f'[pypickle] Pickle file does not exists: {filepath}')
+        logger.info(f'Pickle file does not exists: {filepath}')
     return out
 
 
