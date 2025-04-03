@@ -5,11 +5,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pypickle"
 dynamic = ["version"]
-authors = [{ name = "Erdogan Taskesen", email = "erdogant@gmail.com" },]
+authors = [{ name = "Erdogan Taskesen", email = "erdogant@gmail.com" }]
 description = "pypickle is a Python library to save and load variables in pickle files."
 readme = "README.md"
 requires-python = ">=3"
-license = { file = "LICENSE" }
+license.file = "LICENSE"
 keywords = ["Python", "pypi", "pickle", "save", "load"]
 classifiers = [
     "Programming Language :: Python :: 3",
