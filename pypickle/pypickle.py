@@ -13,14 +13,6 @@ import os
 import re
 import logging
 
-# Clear existing handlers
-root_logger = logging.getLogger()
-[root_logger.removeHandler(h) for h in root_logger.handlers[:]]
-logging.basicConfig(
-    format="%(asctime)s [%(name)s] > %(levelname)-8s > %(message)s",
-    datefmt="%d-%m-%y %H:%M:%S",
-    level=logging.INFO)
-
 logger = logging.getLogger(__name__)
 
 # %% Save pickle file
