@@ -7,6 +7,9 @@ __pycache__/
 *.so
 
 .pypirc
+tests/*.pkl
+pypickle/*.pkl
+*.pkl
 
 # Distribution / packaging
 .pylint.*
