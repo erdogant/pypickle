@@ -101,7 +101,10 @@
 </section>
 <section id="data-modules">
 <h1>Data Modules<a class="headerlink" href="#data-modules" title="Link to this heading"></a></h1>
-<p>You can <code class="docutils literal notranslate"><span class="pre">pypickle</span></code> the underneath data types but it is also possible to pickle classes and functions.</p>
+<p>You can <code class="docutils literal notranslate"><span class="pre">pypickle</span></code> the underneath data types but it is also possible to pickle classes and functions.
+Not everything can be pickled, Examples that can not be pickled are <code class="docutils literal notranslate"><span class="pre">generators</span></code>, <code class="docutils literal notranslate"><span class="pre">inner</span> <span class="pre">classes</span></code>, <code class="docutils literal notranslate"><span class="pre">lambda</span></code> functions and <code class="docutils literal notranslate"><span class="pre">defaultdicts</span></code> and saving machine learning models can also be troublesome.
+In the case of lambda functions, you need to use an additional package named dill. With defaultdicts, you need to create them with a module-level function.
+Examples of modules that can be saved are:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>Booleans</p></li>
@@ -115,29 +118,6 @@
 <li><p>Dictionaries that ontain picklable objects.</p></li>
 </ul>
 </div></blockquote>
-<p>Not everything can be pickled (easily), though: examples of this are generators, inner classes, lambda functions and defaultdicts. In the case of lambda functions, you need to use an additional package named dill. With defaultdicts, you need to create them with a module-level function.</p>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Module Type</p></th>
-<th class="head"><p>Allowed?</p></th>
-<th class="head"><p>How to Change Behavior</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Unknown</p></td>
-<td><p>✅</p></td>
-<td><p>Allowed unless in risky list</p></td>
-</tr>
-<tr class="row-odd"><td><p>Risky (<code class="docutils literal notranslate"><span class="pre">os</span></code>, etc.)</p></td>
-<td><p>❌</p></td>
-<td><p>Must be explicitly added via <code class="docutils literal notranslate"><span class="pre">validate=['nt']</span></code> or <code class="docutils literal notranslate"><span class="pre">validate=False</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>Custom safe</p></td>
-<td><p>✅</p></td>
-<td><p>If included in <code class="docutils literal notranslate"><span class="pre">validate</span></code> param</p></td>
-</tr>
-</tbody>
-</table>
 </section>
 <section id="risk-modules">
 <h1>Risk Modules<a class="headerlink" href="#risk-modules" title="Link to this heading"></a></h1>
@@ -220,6 +200,38 @@
 <h1>Save<a class="headerlink" href="#save" title="Link to this heading"></a></h1>
 <p>The pypickle module serializes objects so they can be saved to a file, and loaded in a program again later on.
 There are many types that can be saved, such as dictionaries, DataFrames, lists, etc. Saving can be performed using <a class="reference internal" href="pypickle.pypickle.html#pypickle.pypickle.save" title="pypickle.pypickle.save"><code class="xref py py-func docutils literal notranslate"><span class="pre">pypickle.pypickle.save()</span></code></a>:</p>
+<p>There are various key security mechanisms implemented in the save() function to mitigate risks associated with saving pickle files, especially when allowing file writes outside predefined safe directories.
+The table below outlines how explicit user consent, robust path validation, prevention of path traversal exploits, and audit logging work together to protect the system from unauthorized or accidental overwrites.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Save Location Type</p></th>
+<th class="head"><p>Allowed?</p></th>
+<th class="head"><p>How to Change Behavior</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Internal (<cite>cwd</cite>, <cite>tempdir</cite>)</p></td>
+<td><p>✅</p></td>
+<td><p>temp directories are permitted</p></td>
+</tr>
+<tr class="row-odd"><td><p>Home directory</p></td>
+<td><p>✅</p></td>
+<td><p>Home dir is allowed</p></td>
+</tr>
+<tr class="row-even"><td><p>External path</p></td>
+<td><p>❌</p></td>
+<td><p>Must be explicitly enabled with <code class="docutils literal notranslate"><span class="pre">allow_external=True</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Unsafe traversal path</p></td>
+<td><p>❌</p></td>
+<td><p>Always blocked, even if <code class="docutils literal notranslate"><span class="pre">allow_external=True</span></code>, due to path normalization &amp; validation</p></td>
+</tr>
+<tr class="row-even"><td><p>Cross-drive unsafe path</p></td>
+<td><p>❌</p></td>
+<td><p>Fails validation if drives differ and no overlap in allowed paths</p></td>
+</tr>
+</tbody>
+</table>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pypickle</span>
 <span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;test.pkl&#39;</span>
 
@@ -234,6 +246,28 @@ There are many types that can be saved, such as dictionaries, DataFrames, lists,
 <section id="load">
 <h1>Load<a class="headerlink" href="#load" title="Link to this heading"></a></h1>
 <p>Loading a pickled file can performed using the function <a class="reference internal" href="pypickle.pypickle.html#pypickle.pypickle.load" title="pypickle.pypickle.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">pypickle.pypickle.load()</span></code></a>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Module Type</p></th>
+<th class="head"><p>Allowed?</p></th>
+<th class="head"><p>How to Change Behavior</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Unknown</p></td>
+<td><p>✅</p></td>
+<td><p>Allowed unless in risky list</p></td>
+</tr>
+<tr class="row-odd"><td><p>Custom safe</p></td>
+<td><p>✅</p></td>
+<td><p>If included in <code class="docutils literal notranslate"><span class="pre">validate</span></code> param</p></td>
+</tr>
+<tr class="row-even"><td><p>Risky (<code class="docutils literal notranslate"><span class="pre">os</span></code>, etc.)</p></td>
+<td><p>❌</p></td>
+<td><p>Must be explicitly added via <code class="docutils literal notranslate"><span class="pre">validate=['nt']</span></code> or <code class="docutils literal notranslate"><span class="pre">validate=False</span></code></p></td>
+</tr>
+</tbody>
+</table>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pypickle</span>
 <span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;test.pkl&#39;</span>
 

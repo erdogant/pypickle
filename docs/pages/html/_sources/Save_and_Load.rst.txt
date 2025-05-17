@@ -8,6 +8,9 @@ Data Modules
 ###########################
 
 You can ``pypickle`` the underneath data types but it is also possible to pickle classes and functions.
+Not everything can be pickled, Examples that can not be pickled are ``generators``, ``inner classes``, ``lambda`` functions and ``defaultdicts`` and saving machine learning models can also be troublesome.
+In the case of lambda functions, you need to use an additional package named dill. With defaultdicts, you need to create them with a module-level function.
+Examples of modules that can be saved are:
 
 	* Booleans
 	* Integers
@@ -19,18 +22,6 @@ You can ``pypickle`` the underneath data types but it is also possible to pickle
 	* Sets
 	* Dictionaries that ontain picklable objects.
 
-
-Not everything can be pickled (easily), though: examples of this are generators, inner classes, lambda functions and defaultdicts. In the case of lambda functions, you need to use an additional package named dill. With defaultdicts, you need to create them with a module-level function.
-
-+------------------------+----------+------------------------------------------------------------------------+
-| Module Type            | Allowed? | How to Change Behavior                                                 |
-+========================+==========+========================================================================+
-| Unknown                | ✅       | Allowed unless in risky list                                           |
-+------------------------+----------+------------------------------------------------------------------------+
-| Risky (``os``, etc.)   | ❌       | Must be explicitly added via ``validate=['nt']`` or ``validate=False`` |
-+------------------------+----------+------------------------------------------------------------------------+
-| Custom safe            | ✅       | If included in ``validate`` param                                      |
-+------------------------+----------+------------------------------------------------------------------------+
 
 
 Risk Modules
@@ -89,6 +80,24 @@ Save
 The pypickle module serializes objects so they can be saved to a file, and loaded in a program again later on.
 There are many types that can be saved, such as dictionaries, DataFrames, lists, etc. Saving can be performed using :func:`pypickle.pypickle.save`:
 
+There are various key security mechanisms implemented in the save() function to mitigate risks associated with saving pickle files, especially when allowing file writes outside predefined safe directories.
+The table below outlines how explicit user consent, robust path validation, prevention of path traversal exploits, and audit logging work together to protect the system from unauthorized or accidental overwrites.
+
++-----------------------------+----------+-------------------------------------------------------------------------------------------+
+| Save Location Type          | Allowed? | How to Change Behavior                                                                    |
++=============================+==========+===========================================================================================+
+| Internal (`cwd`, `tempdir`) | ✅       | temp directories are permitted                                                            |
++-----------------------------+----------+-------------------------------------------------------------------------------------------+
+| Home directory              | ✅       | Home dir is allowed                                                                       |
++-----------------------------+----------+-------------------------------------------------------------------------------------------+
+| External path               | ❌       | Must be explicitly enabled with ``allow_external=True``                                   |
++-----------------------------+----------+-------------------------------------------------------------------------------------------+
+| Unsafe traversal path       | ❌       | Always blocked, even if ``allow_external=True``, due to path normalization & validation   |
++-----------------------------+----------+-------------------------------------------------------------------------------------------+
+| Cross-drive unsafe path     | ❌       | Fails validation if drives differ and no overlap in allowed paths                         |
++-----------------------------+----------+-------------------------------------------------------------------------------------------+
+
+
 .. code:: python
 
 	import pypickle
@@ -107,6 +116,17 @@ Load
 #########
 
 Loading a pickled file can performed using the function :func:`pypickle.pypickle.load`:
+
++------------------------+----------+------------------------------------------------------------------------+
+| Module Type            | Allowed? | How to Change Behavior                                                 |
++========================+==========+========================================================================+
+| Unknown                | ✅       | Allowed unless in risky list                                           |
++------------------------+----------+------------------------------------------------------------------------+
+| Custom safe            | ✅       | If included in ``validate`` param                                      |
++------------------------+----------+------------------------------------------------------------------------+
+| Risky (``os``, etc.)   | ❌       | Must be explicitly added via ``validate=['nt']`` or ``validate=False`` |
++------------------------+----------+------------------------------------------------------------------------+
+
 
 .. code:: python
 
