@@ -177,11 +177,11 @@ def save(filepath: str, var, overwrite: bool = False, fix_imports: bool = True, 
 
     # Check if directory exists
     if os.path.isdir(filepath):
-        logger.error(f'Filepath is a directory, expected a file: {filepath}')
+        logger.error(f'File not saved: Filepath is a directory, expected a file: {filepath}')
         return False
 
     if os.path.isfile(filepath) and not overwrite:
-        logger.warning(f'File already exists and overwrite is False: {filepath}')
+        logger.warning(f'File not saved: File already exists and overwrite=False: {filepath}')
         return False
 
     try:
