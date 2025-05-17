@@ -215,3 +215,28 @@ def test_various_exploits():
         print(mods)
         # result = pypickle.load(filepath, validate=mods)
         # print(f"{name}: Load with validated modules returned: {result}")
+
+
+def test_save_in_temp_dir():
+    with tempfile.TemporaryDirectory() as tmp:
+        filepath = os.path.join(tmp, "test_cwd.pkl")
+        save(filepath, TEST_DATA, overwrite=True)
+        assert load(filepath) == TEST_DATA
+
+def test_save_in_os_tempdir():
+    temp_path = os.path.join(tempfile.gettempdir(), "test_temp.pkl")
+    save(temp_path, TEST_DATA, overwrite=True)
+    assert load(temp_path) == TEST_DATA
+
+def test_allow_external_path():
+    with tempfile.TemporaryDirectory() as tmp:
+        filepath = os.path.join(tmp, "external.pkl")
+        save(filepath, TEST_DATA, allow_external=True)
+        assert load(filepath) == TEST_DATA
+
+def test_overwrite_allowed():
+    with tempfile.TemporaryDirectory() as tmp:
+        filepath = os.path.join(tmp, "overwrite_allowed.pkl")
+        save(filepath, TEST_DATA, overwrite=True)
+        save(filepath, {"msg": "updated"}, overwrite=True)
+        assert load(filepath) == {"msg": "updated"}
