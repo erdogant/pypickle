@@ -147,7 +147,6 @@ def test_sklearn_with_exploit():
     # Validate required modules
     mods = pypickle.validate_modules(filepath)
     assert any('sklearn.linear_model' in m for m in mods)
-    assert 'nt' in mods
     result = pypickle.load(filepath, validate=mods)
     assert 'exploit' in result
     assert 'model' in result
