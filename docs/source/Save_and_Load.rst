@@ -123,8 +123,8 @@ Loading a pickled file can performed using the function :func:`pypickle.pypickle
 	data = pypickle.load(filepath)
 
 
-Modules
-------------------------
+Validation with Modules
+-------------------------
 
 To avoid exploits when loading pickle files we can use the ``validate`` parameter that allows to load modules that you can mark as ``safe``.
 See below an example where we can save a ``sklearn`` model, and load it safely where we include the expected modules.

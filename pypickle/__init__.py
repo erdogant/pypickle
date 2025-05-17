@@ -5,7 +5,6 @@ from pypickle.pypickle import (
     clean,
     check_logger,
     validate_modules,
-    get_allowed_modules,
     get_risk_modules,
 )
 
