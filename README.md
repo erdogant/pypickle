@@ -12,20 +12,27 @@
 <!---[![BuyMeCoffee](https://img.shields.io/badge/buymea-coffee-yellow.svg)](https://www.buymeacoffee.com/erdogant)-->
 
 
-* pypickle is for saving data and loading the files in pickle format.
 
-# 
-**⭐️ Star this repo if you like it ⭐️**
-# 
+pypickle is for saving data and loading the files in pickle format. ⭐️**Star it if you like it**⭐️
 
+---
 
-### [Documentation pages](https://erdogant.github.io/pypickle/)
+### Key Features
 
-On the [documentation pages](https://erdogant.github.io/pypickle/) you can find more information about ``pypickle`` with examples. 
+| Feature | Description |
+|--------|-------------|
+| [**Load**](https://erdogant.github.io/pypickle/pages/html/Parametric.html) | Load your pickle files. |
+| [**Save**](https://erdogant.github.io/pypickle/pages/html/Save_and_Load.html#saving) | Save your files into pickle format. |
 
-# 
+---
 
-##### Install bnlearn from PyPI
+### Resources and Links
+- **Documentation:** [Website](https://erdogant.github.io/pypickle)
+- **Bug Reports and Feature Requests:** [GitHub Issues](https://github.com/erdogant/pypickle/issues)
+
+---
+
+##### Install pypickle from PyPI
 ```bash
 pip install pypickle     # normal install
 pip install -U pypickle  # update if needed
@@ -63,14 +70,21 @@ data = pypickle.load(filepath)
 
 ```
 
-### Contribute
-* All kinds of contributions are welcome!
 
-### Citation
-Please cite pypickle in your publications if this is useful for your research. See column right for citation information.
+### Contributors
+Setting up and maintaining bnlearn has been possible thanks to users and contributors. Thanks to:
+
+<p align="left">
+  <a href="https://github.com/erdogant/pypickle/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=erdogant/pypickle" />
+  </a>
+</p>
 
 ### Maintainer
 * Erdogan Taskesen, github: [erdogant](https://github.com/erdogant)
 * Contributions are welcome.
-* If you wish to buy me a <a href="https://erdogant.github.io/donate/?currency=USD&amount=5">Coffee</a> for this work, it is very appreciated :)
+* Yes! This library is entirely **free**, but it runs on coffee! :) Feel free to support with a <a href="https://erdogant.github.io/donate/?currency=USD&amount=5">Coffee</a>.
+
+<a href="https://www.buymeacoffee.com/erdogant"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=erdogant&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
+
 
