@@ -292,7 +292,8 @@ def load_and_validate(filepath, fix_imports=True, encoding="ASCII", errors="stri
     except (AttributeError, ModuleNotFoundError, EOFError, ImportError) as e:
         logger.error(f"Pickle loading failed: {e.__class__.__name__}: {e}")
     except Exception as e:
-        logger.exception("An unexpected error occurred while validating the pickle file.")
+        # logger.exception("An unexpected error occurred while validating the pickle file.")
+        logger.error(f"UnpicklingError: {e}")
     return None
 
 
