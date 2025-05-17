@@ -149,13 +149,19 @@ def load(filepath: str,
          encoding: str = "ASCII",
          errors: str = "strict",
          validate: Union[bool, list] = True,
-         allowlist = 'default',
          verbose: str = 'info',
          ):
     """
     Load a pickle file from disk, with optional security restrictions.
     pickle files are directly loaded if all modules are in the allowlist. If the pickle file contains unknown modules, the modules needs to be validated using the validate parameter.
     pickle files that contain risky modules, i.e., those that can automatically make changes on the system or start (unwanted) applications are not allowed unless specifically specified using the validate parameter.
+
+    | Module Type        | Allowed? | How to Change Behavior                         |
+    | ------------------ | -------- | ---------------------------------------------- |
+    | Default safe       | V        | Always allowed                                 |
+    | Risky (`os`, etc.) | X        | Must be explicitly added via `validate=['os']` |
+    | Custom safe        | V        | If included in `validate` param                |
+    | Unknown            | V        | Allowed unless in risky list                   |
 
     Parameters
     ----------
@@ -171,11 +177,6 @@ def load(filepath: str,
         - True: Validate with default safe module list.
         - False: Disable all validation (use at own risk).
         - list: modules that are allowed based on name prefixes.
-    allowlist : list (default)
-        Allowed modules based on name prefixes.
-        allowlist = pypickle.get_allowed_modules()
-        allowlist = ['numpy', 'pandas', ...]
-        None: No default modules are allowed.
     verbose : str
         Verbosity level (not used here, placeholder).
 
@@ -202,6 +203,9 @@ def load(filepath: str,
     >>> # Example 3
     >>> # Load without validation: exploit that start calculator
     >>> data = pypickle.load(r'malicious.pkl')
+    >>> data = pypickle.load(r'malicious.pkl', validate=False)
+    >>> mods = pypickle.validate_modules(r'malicious.pkl')
+    >>> data = pypickle.load(r'malicious.pkl', validate=mods)
     >>> #
     >>> # Example 4
     >>> # Sklearn example
@@ -212,7 +216,7 @@ def load(filepath: str,
     >>> pypickle.load('model.pkl', validate=True)
     >>> #
     >>> # Example 5
-    >>> modules_safe = pypickle.get_validate_modules('model.pkl')
+    >>> modules_safe = pypickle.validate_modules('model.pkl')
     >>> pypickle.load('model.pkl', validate=modules_safe)
     >>> pypickle.load('model.pkl', validate='sklearn')
 
@@ -222,15 +226,16 @@ def load(filepath: str,
     # Check validate
     if isinstance(validate, str): validate = [validate]
 
-    # Check allowlist
-    if isinstance(allowlist, str) and allowlist == 'default':
-        logger.info('Allowing default (trusted) modules.')
-        allowlist = get_allowed_modules()
-    elif allowlist is None:
-        allowlist = []
-    else:
-        logger.error('Parameter <allowlist> is invalid.')
-        return False
+    allowlist = []
+    # # Check allowlist
+    # if isinstance(allowlist, str) and allowlist == 'default':
+    #     logger.info('Allowing default (trusted) modules.')
+    #     allowlist = get_allowed_modules()
+    # elif allowlist is None:
+    #     allowlist = []
+    # else:
+    #     logger.error('Parameter <allowlist> is invalid.')
+    #     return False
 
     # Check file
     if not os.path.isfile(filepath):
@@ -277,13 +282,12 @@ def load_and_validate(filepath, fix_imports=True, encoding="ASCII", errors="stri
     try:
         # 1. Validate using custom unpickler (does not return the object, only checks)
         with open(filepath, "rb") as f:
-            ValidateUnpickler(f, validate_modules).load()
-
-        # 2. If successful, load without validation
+            ValidateUnpickler(f, validate_modules=validate_modules, risky_modules=get_risk_modules()).load()
+        # 2. If successful, load pickle file
         return load_pickle(filepath, fix_imports, encoding, errors)
 
     except pickle.UnpicklingError as e:
-        logger.error(f"UnpicklingError: The modules in the pickle file are not validated or are marked as risky.")
+        # logger.error(f"UnpicklingError: The modules in the pickle file are not validated or are marked as risky.")
         logger.error(f"UnpicklingError: {e}")
     except (AttributeError, ModuleNotFoundError, EOFError, ImportError) as e:
         logger.error(f"Pickle loading failed: {e.__class__.__name__}: {e}")
@@ -293,23 +297,65 @@ def load_and_validate(filepath, fix_imports=True, encoding="ASCII", errors="stri
 
 
 # %% Custom Unpickler
-class ValidateUnpickler(pickle.Unpickler):
-    """Restricted unpickler that prevents loading unsafe modules."""
-    # default_allowed_modules = get_allowed_modules()
+# class ValidateUnpickler(pickle.Unpickler):
+#     """Restricted unpickler that prevents loading unsafe modules."""
+#     # default_allowed_modules = get_allowed_modules()
 
-    def __init__(self, file, validate_modules=None, default_allowed_modules=get_allowed_modules()):
+#     def __init__(self, file, validate_modules=None, default_allowed_modules=get_allowed_modules()):
+#         super().__init__(file)
+#         self.allowed_modules = validate_modules if validate_modules else default_allowed_modules
+
+#     def find_class(self, module, name):
+#         if any(module == allowed or module.startswith(f"{allowed}.") for allowed in self.allowed_modules):
+#             mod = __import__(module, fromlist=[name])
+#             return getattr(mod, name)
+#         raise pickle.UnpicklingError(f"Loading '{module}.{name}' is not allowed. Add to pypickle.load(..., validate=['{module}']) to load securily.")
+
+
+# %% Custom Unpickler (Inverse: block risky modules only)
+# class ValidateUnpickler(pickle.Unpickler):
+#     """Unpickler that blocks known risky modules but allows all others."""
+
+#     def __init__(self, file, validate_modules=None, risky_modules=None):
+#         super().__init__(file)
+#         self.risky_modules = risky_modules if risky_modules is not None else get_risk_modules()
+
+#     def find_class(self, module, name):
+#         # Block risky modules
+#         if any(module == risky or module.startswith(f"{risky}.") for risky in self.risky_modules):
+#             raise pickle.UnpicklingError(f"[BLOCKED] Module '{module}' is considered risky. Aborting load.")
+#         # Otherwise allow
+#         mod = __import__(module, fromlist=[name])
+#         return getattr(mod, name)
+
+#%%
+class ValidateUnpickler(pickle.Unpickler):
+    """
+    Unpickler that blocks risky modules but allows user-specified modules even if they would normally be blocked.
+
+    """
+    def __init__(self, file, validate_modules=None, risky_modules=None):
         super().__init__(file)
-        self.allowed_modules = validate_modules if validate_modules else default_allowed_modules
+        self.validate_modules = validate_modules if validate_modules else []
+        self.risky_modules = risky_modules if risky_modules is not None else get_risk_modules()
 
     def find_class(self, module, name):
-        if any(module == allowed or module.startswith(f"{allowed}.") for allowed in self.allowed_modules):
+        # If module is explicitly validated by the user, allow it
+        if any(module == allowed or module.startswith(f"{allowed}.") for allowed in self.validate_modules):
             mod = __import__(module, fromlist=[name])
             return getattr(mod, name)
-        raise pickle.UnpicklingError(f"Loading '{module}.{name}' is not allowed. Add to pypickle.load(..., validate=['{module}']) to load securily.")
+
+        # If module is risky, block it
+        if any(module == risky or module.startswith(f"{risky}.") for risky in self.risky_modules):
+            raise pickle.UnpicklingError(f"[BLOCKED] Module '{module}' is considered risky. Use validate=['{module}'] to allow.")
+
+        # Otherwise allow
+        mod = __import__(module, fromlist=[name])
+        return getattr(mod, name)
 
 
 # %% Utility: Get list of modules in pickle
-def get_validate_modules(filepath: str) -> list:
+def validate_modules(filepath: str) -> list:
     """
     Extract unique module names from a pickle file.
 
