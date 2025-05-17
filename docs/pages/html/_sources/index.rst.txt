@@ -7,6 +7,7 @@ pypickle's documentation!
 ``pypickle`` is a Python library for saving and loading files in pickle format.
 
 
+-----------------------------------
 
 Support
 -----------
