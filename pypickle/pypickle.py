@@ -13,9 +13,82 @@ import os
 import re
 import logging
 import builtins
-from typing import Union
+from typing import Union, List, Set
+import pickletools
+from collections import defaultdict
 
 logger = logging.getLogger(__name__)
+
+#%%
+def get_risk_modules():
+    """Risk modules.
+    These modules can be used for code execution, filesystem manipulation, networking, or loading arbitrary code.
+
+    Returns
+    -------
+    risky_modules : dict
+
+    """
+    risk_modules = [
+    'os',             # Shell access, file system, environment
+    'subprocess',     # Can execute arbitrary system commands
+    'sys',            # System-level operations, e.g., path, exit
+    'nt',             # Windows native system calls (like os)
+    'posix',          # Unix equivalent of nt
+    'builtins',       # If abused (e.g., eval, exec); handled separately
+    'importlib',      # Dynamic importing
+    'socket',         # Network access
+    'selectors',      # Low-level network/socket
+    'multiprocessing',# Starts subprocesses
+    'threading',      # Concurrency (can spawn dangerous threads)
+    'asyncio',        # Async tasks (can be misused)
+    'ctypes',         # Can load arbitrary C libraries
+    'platform',       # Access system info
+    'webbrowser',     # Can open URLs or trigger browser actions
+    'shutil',         # File operations, disk wiping
+    'tempfile',       # File system operations
+    'glob',           # Can access wildcards over filesystem
+    'pathlib',        # File access (safe in limited form, but still risky)
+    'codecs',         # Can decode to arbitrary formats (rare exploit)
+    ]
+    return risk_modules
+
+def get_allowed_modules():
+    """Allowed modules.
+    These modules are allowed.
+
+    Returns
+    -------
+    list
+
+    """
+    allowed_modules = [
+    'builtins',         # Basic Python types and functions
+    'collections',      # e.g., defaultdict, OrderedDict
+    'datetime',         # e.g., datetime, timedelta
+    'types',            # e.g., SimpleNamespace
+    'math',             # Common math functions (sqrt, sin, etc.)
+    'decimal',          # Safer numerical precision
+    'fractions',        # Fractional arithmetic
+    're',               # Regular expressions (safe)
+    'copyreg',          # Used internally by pickle
+    'functools',        # e.g., partial, reduce
+    'operator',         # Functional ops (add, mul, etc.)
+    'itertools',        # Combinatorics
+    'pprint',           # Pretty printing (often in configs)
+    'numpy',            # Safe numerical arrays
+    'pandas',           # Tabular data handling
+    'sklearn',          # ML models (as long as no shelling)
+    'joblib',           # Often used with sklearn
+    'scipy',            # Scientific computing
+    'matplotlib',       # For serialized plots
+    'seaborn',          # Visualization
+    'statsmodels',      # Statistical models
+    'networkx',         # Graph objects
+    'graphviz',         # For exported graph pipelines
+    'pathlib',          # Filesystem paths (safe unless misused)
+    ]
+    return allowed_modules
 
 # %% Save pickle file
 def save(filepath: str, var, overwrite: bool = False, fix_imports: bool = True, verbose: int = 20):
@@ -69,127 +142,214 @@ def save(filepath: str, var, overwrite: bool = False, fix_imports: bool = True, 
         logger.info(f'Pickle file could not be saved: {filepath}')
     return out
 
-# %% Load pickle file
+
+# %% Load Function
 def load(filepath: str,
          fix_imports: bool = True,
          encoding: str = "ASCII",
          errors: str = "strict",
-         safe: Union[bool, dict] = True,
+         validate: Union[bool, list] = True,
+         allowlist = 'default',
          verbose: str = 'info',
          ):
     """
     Load a pickle file from disk, with optional security restrictions.
+    pickle files are directly loaded if all modules are in the allowlist. If the pickle file contains unknown modules, the modules needs to be validated using the validate parameter.
+    pickle files that contain risky modules, i.e., those that can automatically make changes on the system or start (unwanted) applications are not allowed unless specifically specified using the validate parameter.
 
     Parameters
     ----------
     filepath : str
         Path to the pickle file.
-    fix_imports : bool, default=True
-        Compatibility option for loading Python 2 pickles in Python 3.
-    encoding : str, default="ASCII"
-        Encoding for loading legacy Python 2 pickles.
-    errors : str, default="strict"
-        Error handling strategy for decoding.
-    safe : bool or dict, default=True
-        - True: Use safe unpickler with restricted modules.
-        - False: Use standard pickle.load (unsafe).
-        - dict: Use safe unpickler and allow additional custom modules.
-    verbose : str, default='info'
-        Verbosity level for logging.
+    fix_imports : bool
+        Compatibility for loading Python 2 pickles in Python 3.
+    encoding : str
+        Encoding for legacy Python 2 pickles.
+    errors : str
+        Error handling for decoding.
+    validate : bool or list, default=True
+        - True: Validate with default safe module list.
+        - False: Disable all validation (use at own risk).
+        - list: modules that are allowed based on name prefixes.
+    allowlist : list (default)
+        Allowed modules based on name prefixes.
+        allowlist = pypickle.get_allowed_modules()
+        allowlist = ['numpy', 'pandas', ...]
+        None: No default modules are allowed.
+    verbose : str
+        Verbosity level (not used here, placeholder).
 
     Returns
     -------
-    object
-        The deserialized Python object from the pickle file.
+    object or None
+        The loaded Python object or None if loading fails.
 
     Examples
     --------
+    >>> # Example 1
     >>> import pypickle
     >>> filepath = 'mydata.pkl'
     >>> data = [1, 2, 3]
-    >>> pypickle.save(filepath, data)
-    >>> # Load safely (default)
+    >>> status = pypickle.save(filepath, data, overwrite=True)
+    >>> # Load with validation (default)
     >>> data = pypickle.load(filepath)
-    >>> data = pypickle.load(filepath, safe=False)
-
-    >>> # Load with custom safe module
-    >>> data = pypickle.load(filepath, safe={'my_custom_module': {'MyClass'}})
-
-    >>> # Load unsafely (not recommended)
-    >>> data = pypickle.load(filepath, safe=False)
-
-    >>> # Load unsafely exploit that start calculator
-    >>> data = pypickle.load(r'D:\REPOS\pypickle\tests/malicious.pkl')
+    >>> data = pypickle.load(filepath, validate=False)
+    >>> #
+    >>> # Example 2
+    >>> # Load without validation (not recommended)
+    >>> data = pypickle.load(filepath, validate=False)
+    >>> #
+    >>> # Example 3
+    >>> # Load without validation: exploit that start calculator
+    >>> data = pypickle.load(r'malicious.pkl')
+    >>> #
+    >>> # Example 4
+    >>> # Sklearn example
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> model=LogisticRegression()
+    >>> status = pypickle.save('model.pkl', model, overwrite=True)
+    >>> pypickle.load('model.pkl', validate=False)
+    >>> pypickle.load('model.pkl', validate=True)
+    >>> #
+    >>> # Example 5
+    >>> modules_safe = pypickle.get_validate_modules('model.pkl')
+    >>> pypickle.load('model.pkl', validate=modules_safe)
+    >>> pypickle.load('model.pkl', validate='sklearn')
 
     """
-    out = None
-    if os.path.isfile(filepath):
-        # logger.info(f"Pickle file loaded: {filepath}")
-        if isinstance(safe, dict) or safe is True:
-            user_modules = safe if isinstance(safe, dict) else {}
-            out = load_safe(filepath, user_modules)
-        else:
-            out = load_unsafe(filepath, fix_imports, encoding, errors)
+    # Set the logger
+    set_logger(verbose)
+    # Check validate
+    if isinstance(validate, str): validate = [validate]
+
+    # Check allowlist
+    if isinstance(allowlist, str) and allowlist == 'default':
+        logger.info('Allowing default (trusted) modules.')
+        allowlist = get_allowed_modules()
+    elif allowlist is None:
+        allowlist = []
     else:
+        logger.error('Parameter <allowlist> is invalid.')
+        return False
+
+    # Check file
+    if not os.path.isfile(filepath):
         logger.info(f'Pickle file does not exist: {filepath}')
+        return None
 
-    return out
-
-
-# %%
-def load_safe(filepath, safe_modules={}):
-    """Load pickle file securely with error handling."""
-    logger.info(f"Pickle file loaded (safe): {filepath}")
-    try:
-        with open(filepath, "rb") as f:
-            return SafeUnpickler(f, safe_modules).load()
-    except pickle.UnpicklingError as e:
-        logger.error(f"UnpicklingError: The file may be unsafe or corrupted.\nDetails: {e}")
-    except (AttributeError, ModuleNotFoundError, EOFError, ImportError) as e:
-        logger.error(f"Pickle loading failed: {e.__class__.__name__}: {e}")
-    except Exception as e:
-        logger.exception("An unexpected error occurred while loading the pickle file.")
-    return None
+    # Loading
+    logger.info(f"Loading Pickle file: {filepath}")
+    if isinstance(validate, list) or validate is True:
+        # Add custom modules to the defaults
+        user_modules = validate + allowlist if isinstance(validate, list) else None
+        return load_and_validate(filepath, fix_imports, encoding, errors, user_modules)
+    else:
+        return load_pickle(filepath, fix_imports, encoding, errors)
 
 
-def load_unsafe(filepath, fix_imports, encoding, errors):
-    """Load a pickle file without restrictions (not safe)."""
-    logger.info(f"Pickle file loaded (unsafe): {filepath}")
+# %% Unsafe Loader (No Validation)
+def load_pickle(filepath, fix_imports=True, encoding="ASCII", errors="strict"):
+    """Load a pickle file without validation."""
     with open(filepath, "rb") as f:
         return pickle.load(f, fix_imports=fix_imports, encoding=encoding, errors=errors)
 
 
-# %%
-class SafeUnpickler(pickle.Unpickler):
-    """Restricted unpickler that prevents arbitrary code execution."""
+# %% Secure Pickle Loader
+def load_and_validate(filepath, fix_imports=True, encoding="ASCII", errors="strict", validate_modules=None):
+    """
+    Securely validate pickle file contents and load it only if safe.
 
-    allowed_builtins = {
-        'range', 'complex', 'set', 'frozenset', 'slice',
-        'dict', 'list', 'tuple', 'str', 'int', 'float', 'bool',
-        'bytes', 'bytearray', 'NoneType', 'object',
-    }
+    Parameters
+    ----------
+    filepath : str
+        Path to the pickle file.
+    validate_modules : list or None
+        List of allowed module prefixes (e.g. ['sklearn', 'numpy']).
+    fix_imports : bool
+    encoding : str
+    errors : str
 
-    def __init__(self, file, safe_modules=None):
+    Returns
+    -------
+    object or None
+        The unpickled object or None if loading failed or unsafe.
+    """
+    try:
+        # 1. Validate using custom unpickler (does not return the object, only checks)
+        with open(filepath, "rb") as f:
+            ValidateUnpickler(f, validate_modules).load()
+
+        # 2. If successful, load without validation
+        return load_pickle(filepath, fix_imports, encoding, errors)
+
+    except pickle.UnpicklingError as e:
+        logger.error(f"UnpicklingError: The modules in the pickle file are not validated or are marked as risky.")
+        logger.error(f"UnpicklingError: {e}")
+    except (AttributeError, ModuleNotFoundError, EOFError, ImportError) as e:
+        logger.error(f"Pickle loading failed: {e.__class__.__name__}: {e}")
+    except Exception as e:
+        logger.exception("An unexpected error occurred while validating the pickle file.")
+    return None
+
+
+# %% Custom Unpickler
+class ValidateUnpickler(pickle.Unpickler):
+    """Restricted unpickler that prevents loading unsafe modules."""
+    # default_allowed_modules = get_allowed_modules()
+
+    def __init__(self, file, validate_modules=None, default_allowed_modules=get_allowed_modules()):
         super().__init__(file)
-        if safe_modules is None:
-            safe_modules = {}
-
-        self.allowed_modules = {
-            'builtins': self.allowed_builtins,
-            'collections': {'OrderedDict', 'defaultdict', 'deque'},
-            'datetime': {'datetime', 'date', 'time', 'timedelta'},
-            'types': {'SimpleNamespace'},
-            **safe_modules
-        }
+        self.allowed_modules = validate_modules if validate_modules else default_allowed_modules
 
     def find_class(self, module, name):
-        # This is used internally by the pickle.Unpickler class during the unpickling process.
-        if module in self.allowed_modules and name in self.allowed_modules[module]:
-            if module == "builtins":
-                return getattr(builtins, name)
-            mod = __import__(module)
+        if any(module == allowed or module.startswith(f"{allowed}.") for allowed in self.allowed_modules):
+            mod = __import__(module, fromlist=[name])
             return getattr(mod, name)
-        raise pickle.UnpicklingError(f"Global '{module}.{name}' is forbidden")
+        raise pickle.UnpicklingError(f"Loading '{module}.{name}' is not allowed. Add to pypickle.load(..., validate=['{module}']) to load securily.")
+
+
+# %% Utility: Get list of modules in pickle
+def get_validate_modules(filepath: str) -> list:
+    """
+    Extract unique module names from a pickle file.
+
+    Parameters
+    ----------
+    filepath : str
+        Path to the pickle file.
+    warn : bool
+        Print warnings for risky modules (like os, subprocess).
+
+    Returns
+    -------
+    list
+        List of required module name prefixes (e.g. ['sklearn', 'numpy']).
+    """
+    risky_modules = get_risk_modules()
+    modules = set()
+    stack = []
+
+    with open(filepath, 'rb') as f:
+        for opcode, arg, _ in pickletools.genops(f):
+            if opcode.name in {'BINUNICODE', 'SHORT_BINUNICODE', 'UNICODE'}:
+                stack.append(arg)
+            elif opcode.name == 'GLOBAL' and isinstance(arg, str):
+                try:
+                    module, _ = arg.strip().split(' ')
+                    modules.add(module)
+                    if module in risky_modules:
+                        logger.warning(f"[WARNING] Risky module: {module}")
+                except Exception:
+                    continue
+            elif opcode.name == 'STACK_GLOBAL':
+                if len(stack) >= 2:
+                    name = stack.pop()
+                    module = stack.pop()
+                    modules.add(module)
+                    if module in risky_modules:
+                        logger.warning(f"[WARNING] Risky module: {module}.{name}")
+
+    return sorted(modules)
 
 
 # %% Clean filename
