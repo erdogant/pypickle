@@ -5,6 +5,11 @@ import pytest
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LogisticRegression
+from pypickle import save, load  # Adjust if located elsewhere
+import tempfile
+
+# Sample test variable
+TEST_DATA = {"msg": "hello"}
 
 def test_logger():
     pypickle.check_logger(verbose=0)
