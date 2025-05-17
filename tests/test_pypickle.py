@@ -158,13 +158,13 @@ def test_sklearn_with_exploit():
 
     # Allow risky one explicitly
     result = pypickle.load(filepath, validate=['sklearn', 'numpy', 'nt'])
-    assert 'model' in result
-    assert 'exploit' in result
-    assert 'data' in result
+    assert 'model' in result.keys()
+    assert 'exploit' in result.keys()
+    assert 'data' in result.keys()
 
     # Also test alias cases like 'nt'
     result = pypickle.load(filepath, validate=['nt'])
-    assert 'exploit' in result
-    assert 'model' in result
-    assert 'data' in result
+    assert 'model' in result.keys()
+    assert 'exploit' in result.keys()
+    assert 'data' in result.keys()
 
