@@ -28,12 +28,11 @@ pypickle is for saving data and loading the files in pickle format. ⭐️**Star
 
 For security reasons, pickle files are validated by checking the inner modules before loading. Twenty modules are classified as high-risk (see [here](https://erdogant.github.io/pypickle/pages/html/Save_and_Load.html#risk-modules)) and can not be loaded without validation.
 
-
 | Module Type           | Allowed? | How to Change Behavior                                                  |
 |-----------------------|----------|--------------------------------------------------------------------------|
 | Unknown               | ✅       | Allowed unless in high-risk list                                            |
-| Risky (`os`, etc.)    | ❌       | Must be explicitly added via `validate=['nt']` or `validate=False`      |
 | Custom safe           | ✅       | If included in `validate` param                                         |
+| Risky (`os`, etc.)    | ❌       | Must be explicitly added via `validate=['nt']` or `validate=False`      |
 
 ---
 
