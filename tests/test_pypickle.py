@@ -168,3 +168,45 @@ def test_sklearn_with_exploit():
     assert 'exploit' in result.keys()
     assert 'data' in result.keys()
 
+def test_various_exploits():
+    # Define all exploit classes in a dictionary
+    exploit_classes = {
+        'os': type('ExploitOS', (), {
+            '__reduce__': lambda self: (__import__('os').system, ("echo '[os] Exploit triggered!'",))
+        }),
+        'subprocess': type('ExploitSubprocess', (), {
+            '__reduce__': lambda self: (__import__('subprocess').Popen, (["echo", "[subprocess] Exploit triggered!"],))
+        }),
+        'socket': type('ExploitSocket', (), {
+            '__reduce__': lambda self: (__import__('socket').create_connection, (("example.com", 80),))
+        }),
+        'webbrowser': type('ExploitWebBrowser', (), {
+            '__reduce__': lambda self: (__import__('webbrowser').open, ("http://example.com/malware",))
+        }),
+        'ctypes': type('ExploitCtypes', (), {
+            '__reduce__': lambda self: (__import__('ctypes').CDLL, ("libc.so.6",))
+        }),
+    }
+
+    # Loop through all exploits
+    for name, cls in exploit_classes.items():
+        filepath = f"exploit_{name}.pkl"
+        print(f"\n--- Testing exploit: {name} ---")
+
+        # Save the exploit
+        pypickle.save(filepath, cls(), overwrite=True)
+
+        # Safe load (should fail and return None)
+        result = pypickle.load(filepath)
+        assert result is None or result == 0
+        # assert result is None or result == 0, f"{name}: Safe load failed to block"
+
+        # Force unsafe load (should execute)
+        # result = pypickle.load(filepath, validate=False)
+        # print(f"{name}: Force load returned: {result}")
+
+        # Load with validated modules from inspection
+        mods = pypickle.validate_modules(filepath)
+        print(mods)
+        # result = pypickle.load(filepath, validate=mods)
+        # print(f"{name}: Load with validated modules returned: {result}")
