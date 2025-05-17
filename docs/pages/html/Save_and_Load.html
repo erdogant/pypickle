@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What is pickling? &mdash; pypickle pypickle documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=e0179649" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=b8daf10a"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Sponsor" href="Documentation.html" />
+    <link rel="prev" title="Pip install" href="Installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pypickle
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Pip install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html#uninstalling">Uninstalling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">What is pickling?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#data-modules">Data Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#risk-modules">Risk Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#save">Save</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#load">Load</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#validation-with-modules">Validation with Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#brute-force">Brute-force</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html">Sponsor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#github">Github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Coding%20quality.html">Coding quality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pypickle.pypickle.html">API References</a></li>
+</ul>
+
+    <a href= "genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pypickle</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">What is pickling?</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Save_and_Load.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="what-is-pickling">
+<h1>What is pickling?<a class="headerlink" href="#what-is-pickling" title="Link to this heading"></a></h1>
+<p>Pickling is useful for applications where you need some degree of persistency in your data. Your program’s state data can be saved to disk, so you can continue working on it later on. It can also be very useful when you’re working with machine learning algorithms, where you want to save them to be able to make new predictions at a later time, without having to rewrite everything or train the model all over again [1]. Note that pickling does not involve any compression.</p>
+</section>
+<section id="data-modules">
+<h1>Data Modules<a class="headerlink" href="#data-modules" title="Link to this heading"></a></h1>
+<p>You can <code class="docutils literal notranslate"><span class="pre">pypickle</span></code> the underneath data types but it is also possible to pickle classes and functions.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Booleans</p></li>
+<li><p>Integers</p></li>
+<li><p>Floats</p></li>
+<li><p>Complex numbers</p></li>
+<li><p>Strings (normal and Unicode)</p></li>
+<li><p>Tuples</p></li>
+<li><p>Lists</p></li>
+<li><p>Sets</p></li>
+<li><p>Dictionaries that ontain picklable objects.</p></li>
+</ul>
+</div></blockquote>
+<p>Not everything can be pickled (easily), though: examples of this are generators, inner classes, lambda functions and defaultdicts. In the case of lambda functions, you need to use an additional package named dill. With defaultdicts, you need to create them with a module-level function.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Module Type</p></th>
+<th class="head"><p>Allowed?</p></th>
+<th class="head"><p>How to Change Behavior</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Unknown</p></td>
+<td><p>✅</p></td>
+<td><p>Allowed unless in risky list</p></td>
+</tr>
+<tr class="row-odd"><td><p>Risky (<code class="docutils literal notranslate"><span class="pre">os</span></code>, etc.)</p></td>
+<td><p>❌</p></td>
+<td><p>Must be explicitly added via <code class="docutils literal notranslate"><span class="pre">validate=['nt']</span></code> or <code class="docutils literal notranslate"><span class="pre">validate=False</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Custom safe</p></td>
+<td><p>✅</p></td>
+<td><p>If included in <code class="docutils literal notranslate"><span class="pre">validate</span></code> param</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="risk-modules">
+<h1>Risk Modules<a class="headerlink" href="#risk-modules" title="Link to this heading"></a></h1>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Risky Modules Blocked by Default</span><a class="headerlink" href="#id1" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Module</p></th>
+<th class="head"><p>Risk / Reason for Blocking</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>os</p></td>
+<td><p>Shell access, file system, environment</p></td>
+</tr>
+<tr class="row-odd"><td><p>subprocess</p></td>
+<td><p>Can execute arbitrary system commands</p></td>
+</tr>
+<tr class="row-even"><td><p>sys</p></td>
+<td><p>System-level operations, e.g., path, exit</p></td>
+</tr>
+<tr class="row-odd"><td><p>nt</p></td>
+<td><p>Windows native system calls (like os)</p></td>
+</tr>
+<tr class="row-even"><td><p>posix</p></td>
+<td><p>Unix equivalent of nt</p></td>
+</tr>
+<tr class="row-odd"><td><p>builtins</p></td>
+<td><p>If abused (e.g., eval, exec); handled separately</p></td>
+</tr>
+<tr class="row-even"><td><p>importlib</p></td>
+<td><p>Dynamic importing</p></td>
+</tr>
+<tr class="row-odd"><td><p>socket</p></td>
+<td><p>Network access</p></td>
+</tr>
+<tr class="row-even"><td><p>selectors</p></td>
+<td><p>Low-level network/socket</p></td>
+</tr>
+<tr class="row-odd"><td><p>multiprocessing</p></td>
+<td><p>Starts subprocesses</p></td>
+</tr>
+<tr class="row-even"><td><p>threading</p></td>
+<td><p>Concurrency (can spawn dangerous threads)</p></td>
+</tr>
+<tr class="row-odd"><td><p>asyncio</p></td>
+<td><p>Async tasks (can be misused)</p></td>
+</tr>
+<tr class="row-even"><td><p>ctypes</p></td>
+<td><p>Can load arbitrary C libraries</p></td>
+</tr>
+<tr class="row-odd"><td><p>platform</p></td>
+<td><p>Access system info</p></td>
+</tr>
+<tr class="row-even"><td><p>webbrowser</p></td>
+<td><p>Can open URLs or trigger browser actions</p></td>
+</tr>
+<tr class="row-odd"><td><p>shutil</p></td>
+<td><p>File operations, disk wiping</p></td>
+</tr>
+<tr class="row-even"><td><p>tempfile</p></td>
+<td><p>File system operations</p></td>
+</tr>
+<tr class="row-odd"><td><p>glob</p></td>
+<td><p>Can access wildcards over filesystem</p></td>
+</tr>
+<tr class="row-even"><td><p>pathlib</p></td>
+<td><p>File access (safe in limited form, but still risky)</p></td>
+</tr>
+<tr class="row-odd"><td><p>codecs</p></td>
+<td><p>Can decode to arbitrary formats (rare exploit)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="save">
+<h1>Save<a class="headerlink" href="#save" title="Link to this heading"></a></h1>
+<p>The pypickle module serializes objects so they can be saved to a file, and loaded in a program again later on.
+There are many types that can be saved, such as dictionaries, DataFrames, lists, etc. Saving can be performed using <a class="reference internal" href="pypickle.pypickle.html#pypickle.pypickle.save" title="pypickle.pypickle.save"><code class="xref py py-func docutils literal notranslate"><span class="pre">pypickle.pypickle.save()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pypickle</span>
+<span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;test.pkl&#39;</span>
+
+<span class="c1"># Some data in a list</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+
+<span class="c1"># Save</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="load">
+<h1>Load<a class="headerlink" href="#load" title="Link to this heading"></a></h1>
+<p>Loading a pickled file can performed using the function <a class="reference internal" href="pypickle.pypickle.html#pypickle.pypickle.load" title="pypickle.pypickle.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">pypickle.pypickle.load()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pypickle</span>
+<span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;test.pkl&#39;</span>
+
+<span class="c1"># Some data in a list</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+
+<span class="c1"># Save</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Load file</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="validation-with-modules">
+<h2>Validation with Modules<a class="headerlink" href="#validation-with-modules" title="Link to this heading"></a></h2>
+<p>To avoid exploits when loading pickle files we can use the <code class="docutils literal notranslate"><span class="pre">validate</span></code> parameter that allows to load modules that you can mark as <code class="docutils literal notranslate"><span class="pre">safe</span></code>.
+See below an example where we can save a <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> model, and load it safely where we include the expected modules.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_iris</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pypickle</span>
+
+<span class="c1"># Load example dataset</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Train a model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Save the model</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Gather the modules which you can use later to load the pickle file with the expected modules.</span>
+<span class="n">mods</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">validate_modules</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">)</span>
+<span class="c1"># [&#39;classes_&#39;,</span>
+<span class="c1">#  &#39;numpy&#39;,</span>
+<span class="c1">#  &#39;numpy._core.multiarray&#39;,</span>
+<span class="c1">#  &#39;sklearn.linear_model._logistic&#39;]</span>
+<span class="n">model_loaded</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="n">mods</span><span class="p">)</span>
+
+<span class="c1"># Load the model but without adding ``validate=False``)</span>
+<span class="n">model_loaded</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Predict</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">model_loaded</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="brute-force">
+<h2>Brute-force<a class="headerlink" href="#brute-force" title="Link to this heading"></a></h2>
+<p>All pickle files can be loaded using <code class="docutils literal notranslate"><span class="pre">validate=False</span></code> parameter. This will ignore all module types and risk classifications.
+See below an example how pypickle can not load an exploit but requires to use a validation or brute-force loading.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a malicious pickle trying to execute code (like opening calculator)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Exploit</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;echo &#39;Exploit executed&#39;&quot;</span><span class="p">,))</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pypickle</span>
+<span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;malicious.pkl&#39;</span>
+<span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">Exploit</span><span class="p">(),</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Attempt safe load</span>
+<span class="n">loaded</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+
+<span class="c1"># Brute-force load and ignore all risk modules</span>
+<span class="n">loaded</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Load using validation</span>
+<span class="n">mods</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">validate_modules</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+<span class="c1"># Load</span>
+<span class="n">loaded</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="n">mods</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>[1] <a class="reference external" href="https://www.datacamp.com/community/tutorials/pickle-python-tutorial">https://www.datacamp.com/community/tutorials/pickle-python-tutorial</a></p>
+<hr>
+<center>
+        <script async src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+        <!-- Show an image ad -->
+        <!-- <div data-ea-publisher="erdogantgithubio" data-ea-type="image"></div> -->
+        <div data-ea-publisher="erdogantgithubio" data-ea-type="image" data-ea-style="stickybox"></div>
+</center>
+<hr></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Installation.html" class="btn btn-neutral float-left" title="Pip install" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Documentation.html" class="btn btn-neutral float-right" title="Sponsor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Erdogan Taskesen.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
