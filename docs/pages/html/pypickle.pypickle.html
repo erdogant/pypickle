@@ -51,9 +51,10 @@
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html">What is pickling?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#store-types-of-data">Store types of data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#saving">Saving</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#loading">Loading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#data-modules">Data Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#risk-modules">Risk Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#save">Save</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#load">Load</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul class="current">
@@ -61,13 +62,22 @@
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html#github">Github</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Coding%20quality.html">Coding quality</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.ValidateUnpickler"><code class="docutils literal notranslate"><span class="pre">ValidateUnpickler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pypickle.pypickle.ValidateUnpickler.find_class"><code class="docutils literal notranslate"><span class="pre">ValidateUnpickler.find_class()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.check_logger"><code class="docutils literal notranslate"><span class="pre">check_logger()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.clean"><code class="docutils literal notranslate"><span class="pre">clean()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.convert_verbose_to_new"><code class="docutils literal notranslate"><span class="pre">convert_verbose_to_new()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.get_allowed_modules"><code class="docutils literal notranslate"><span class="pre">get_allowed_modules()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.get_risk_modules"><code class="docutils literal notranslate"><span class="pre">get_risk_modules()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.load_and_validate"><code class="docutils literal notranslate"><span class="pre">load_and_validate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.load_pickle"><code class="docutils literal notranslate"><span class="pre">load_pickle()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.set_logger"><code class="docutils literal notranslate"><span class="pre">set_logger()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.validate_modules"><code class="docutils literal notranslate"><span class="pre">validate_modules()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -106,6 +116,23 @@ Author      : E.Taskesen
 Contact     : <a class="reference external" href="mailto:erdogant&#37;&#52;&#48;gmail&#46;com">erdogant<span>&#64;</span>gmail<span>&#46;</span>com</a>
 Github      : <a class="reference external" href="https://github.com/erdogant/pypickle">https://github.com/erdogant/pypickle</a>
 Licence     : See licences</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pypickle.pypickle.ValidateUnpickler">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">ValidateUnpickler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_modules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">risky_modules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypickle.pypickle.ValidateUnpickler" title="Link to this definition"></a></dt>
+<dd><p>Unpickler that blocks risky modules but allows user-specified modules even if they would normally be blocked.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypickle.pypickle.ValidateUnpickler.find_class">
+<span class="sig-name descname"><span class="pre">find_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypickle.pypickle.ValidateUnpickler.find_class" title="Link to this definition"></a></dt>
+<dd><p>Return an object from a specified module.</p>
+<p>If necessary, the module will be imported. Subclasses may override
+this method (e.g. to restrict unpickling of arbitrary classes and
+functions).</p>
+<p>This method is called whenever a class or a function object is
+needed.  Both arguments passed are str objects.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="pypickle.pypickle.check_logger">
 <span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">check_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose:</span> <span class="pre">[&lt;class</span> <span class="pre">'str'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'int'&gt;]</span> <span class="pre">=</span> <span class="pre">'info'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypickle.pypickle.check_logger" title="Link to this definition"></a></dt>
@@ -154,42 +181,138 @@ Licence     : See licences</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pypickle.pypickle.get_allowed_modules">
+<span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">get_allowed_modules</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypickle.pypickle.get_allowed_modules" title="Link to this definition"></a></dt>
+<dd><p>Allowed modules.
+These modules are allowed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pypickle.pypickle.get_logger">
 <span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypickle.pypickle.get_logger" title="Link to this definition"></a></dt>
 <dd><p>Return logger status.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pypickle.pypickle.get_risk_modules">
+<span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">get_risk_modules</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypickle.pypickle.get_risk_modules" title="Link to this definition"></a></dt>
+<dd><p>Risk modules.
+These modules can be used for code execution, filesystem manipulation, networking, or loading arbitrary code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>risky_modules</strong></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pypickle.pypickle.load">
-<span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fix_imports</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ASCII'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'strict'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypickle.pypickle.load" title="Link to this definition"></a></dt>
-<dd><p>Load pickle files for input variables.</p>
+<span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fix_imports</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ASCII'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'strict'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'info'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypickle.pypickle.load" title="Link to this definition"></a></dt>
+<dd><p>Load a pickle file from disk, with optional security restrictions.
+pickle files are directly loaded if all modules are in the allowlist. If the pickle file contains unknown modules, the modules needs to be validated using the validate parameter.
+pickle files that contain risky modules, i.e., those that can automatically make changes on the system or start (unwanted) applications are not allowed unless specifically specified using the validate parameter.</p>
+<div class="line-block">
+<div class="line">Module Type        | Allowed? | How to Change Behavior                         |</div>
+<div class="line">—————— | ——– | ———————————————- |</div>
+<div class="line">Unknown            | V        | Allowed unless in risky list                   |</div>
+<div class="line">Risky (<cite>os</cite>, etc.) | X        | Must be explicitly added via <cite>validate=[‘nt’]</cite> |</div>
+<div class="line">Custom safe        | V        | If included in <cite>validate</cite> param                |</div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filepath</strong> (<em>str</em>) – Pathname to store pickle files.</p></li>
-<li><p><strong>fix_imports</strong> (<em>bool</em><em>, </em><em>(</em><em>default=True</em><em>)</em>) – fix_imports are used for compatibility support for pickle stream generated by Python 2. If fix_imports is true, pickle will try to map the old Python 2 names to the new names used in Python 3.</p></li>
-<li><p><strong>encoding</strong> (<em>str</em><em>, </em><em>(</em><em>default: &quot;ASCII&quot;</em><em>)</em>) – encoding tell pickle how to decode 8-bit string instances pickled by Python 2.
-The encoding can be “bytes” to read these 8-bit string instances as bytes objects. Using encoding=”latin1” is required for unpickling NumPy arrays and instances of datetime, date and time pickled by Python 2.</p></li>
-<li><p><strong>errors</strong> (<em>str</em><em>, </em><em>(</em><em>default: &quot;strict&quot;</em><em>)</em>) – errors tell pickle how to decode 8-bit string instances pickled by Python 2.</p></li>
-<li><p><strong>verbose</strong> (<em>int</em><em>, </em><em>optional</em>) – Show message. A higher number gives more informatie. The default is 3.</p></li>
+<li><p><strong>filepath</strong> (<em>str</em>) – Path to the pickle file.</p></li>
+<li><p><strong>fix_imports</strong> (<em>bool</em>) – Compatibility for loading Python 2 pickles in Python 3.</p></li>
+<li><p><strong>encoding</strong> (<em>str</em>) – Encoding for legacy Python 2 pickles.</p></li>
+<li><p><strong>errors</strong> (<em>str</em>) – Error handling for decoding.</p></li>
+<li><p><strong>validate</strong> (<em>bool</em><em> or </em><em>list</em><em>, </em><em>default=True</em>) – <ul>
+<li><p>True: Validate with default safe module list.</p></li>
+<li><p>False: Disable all validation (use at own risk).</p></li>
+<li><p>list: modules that are allowed based on name prefixes.</p></li>
+</ul>
+</p></li>
+<li><p><strong>verbose</strong> (<em>str</em>) – Verbosity level (not used here, placeholder).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>Status of succes</strong></p>
+<dd class="field-even"><p>The loaded Python object or None if loading fails.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool [True,False].</p>
+<dd class="field-odd"><p>object or None</p>
 </dd>
 </dl>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pypickle</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;test.pkl&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load file</span>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Example 1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pypickle</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;mydata.pkl&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load with validation (default)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Example 2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load without validation (not recommended)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Example 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load without validation: exploit that start calculator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;malicious.pkl&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;malicious.pkl&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mods</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">validate_modules</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;malicious.pkl&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;malicious.pkl&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="n">mods</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Example 4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Sklearn example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Example 5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">modules_safe</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">validate_modules</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="n">modules_safe</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="s1">&#39;sklearn&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pypickle.pypickle.load_and_validate">
+<span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">load_and_validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fix_imports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ASCII'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'strict'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_modules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypickle.pypickle.load_and_validate" title="Link to this definition"></a></dt>
+<dd><p>Securely validate pickle file contents and load it only if safe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>str</em>) – Path to the pickle file.</p></li>
+<li><p><strong>validate_modules</strong> (<em>list</em><em> or </em><em>None</em>) – List of allowed module prefixes (e.g. [‘sklearn’, ‘numpy’]).</p></li>
+<li><p><strong>fix_imports</strong> (<em>bool</em>)</p></li>
+<li><p><strong>encoding</strong> (<em>str</em>)</p></li>
+<li><p><strong>errors</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The unpickled object or None if loading failed or unsafe.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>object or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pypickle.pypickle.load_pickle">
+<span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">load_pickle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fix_imports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ASCII'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'strict'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypickle.pypickle.load_pickle" title="Link to this definition"></a></dt>
+<dd><p>Load a pickle file without validation.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -248,6 +371,26 @@ The encoding can be “bytes” to read these 8-bit string instances as bytes ob
 <li><p><em>&gt; logger.critical(“Hello critical”)</em></p></li>
 </ul>
 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pypickle.pypickle.validate_modules">
+<span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">validate_modules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#pypickle.pypickle.validate_modules" title="Link to this definition"></a></dt>
+<dd><p>Extract unique module names from a pickle file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>str</em>) – Path to the pickle file.</p></li>
+<li><p><strong>warn</strong> (<em>bool</em>) – Print warnings for risky modules (like os, subprocess).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of required module name prefixes (e.g. [‘sklearn’, ‘numpy’]).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
