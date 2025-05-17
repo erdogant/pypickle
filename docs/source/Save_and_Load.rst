@@ -22,6 +22,19 @@ You can ``pypickle`` the underneath data types but it is also possible to pickle
 
 Not everything can be pickled (easily), though: examples of this are generators, inner classes, lambda functions and defaultdicts. In the case of lambda functions, you need to use an additional package named dill. With defaultdicts, you need to create them with a module-level function.
 
++------------------------+----------+-------------------------------------------------------------+
+| Module Type            | Allowed? | How to Change Behavior                                      |
++========================+==========+=============================================================+
+| Default safe           | ✅       | Always allowed                                              |
++------------------------+----------+-------------------------------------------------------------+
+| Risky (``os``, etc.)   | ❌       | Must be explicitly added via ``validate=['os']``            |
++------------------------+----------+-------------------------------------------------------------+
+| Custom safe            | ✅       | If included in ``validate`` param                           |
++------------------------+----------+-------------------------------------------------------------+
+| Unknown                | ✅       | Allowed unless in risky list                                |
++------------------------+----------+-------------------------------------------------------------+
+
+
 Save
 #########
 
