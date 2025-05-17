@@ -81,6 +81,8 @@ data = pypickle.load(filepath)
 
 ```
 
+---
+
 
 ### Contributors
 Setting up and maintaining bnlearn has been possible thanks to users and contributors. Thanks to:
