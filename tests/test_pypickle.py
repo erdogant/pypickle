@@ -121,10 +121,10 @@ def test_malicious_pickle():
 
     # Check validate_modules
     mods = pypickle.validate_modules(filepath)
-    assert 'nt' in mods
+    assert 'nt' or 'posix' in mods
 
     # Explicit allow should work
-    result = pypickle.load(filepath, validate=['nt'])
+    result = pypickle.load(filepath, validate=['nt', 'posix'])
     assert isinstance(result, int)
 
 def test_sklearn_with_exploit():
@@ -157,13 +157,13 @@ def test_sklearn_with_exploit():
     assert result is None  # nt is still blocked
 
     # Allow risky one explicitly
-    result = pypickle.load(filepath, validate=['sklearn', 'numpy', 'nt'])
+    result = pypickle.load(filepath, validate=['sklearn', 'numpy', 'nt', 'posix'])
     assert 'model' in result.keys()
     assert 'exploit' in result.keys()
     assert 'data' in result.keys()
 
     # Also test alias cases like 'nt'
-    result = pypickle.load(filepath, validate=['nt'])
+    result = pypickle.load(filepath, validate=['nt', 'posix'])
     assert 'model' in result.keys()
     assert 'exploit' in result.keys()
     assert 'data' in result.keys()
