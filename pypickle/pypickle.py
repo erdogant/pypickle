@@ -223,7 +223,7 @@ def is_known_extension(filepath: str, allowed_extensions=None) -> bool:
     True
     """
     if allowed_extensions is None:
-        allowed_extensions = ['.pkl', '.pickle']
+        allowed_extensions = ['.pkl', '.pickle', '.pklz', '.pbz2']
 
     _, ext = os.path.splitext(filepath)
     return ext.lower() in allowed_extensions
@@ -242,7 +242,7 @@ def save(filepath: str,
     Before saving, there are various security checks:
     * The filepath should be inside the safe paths (user and temp directories). However, this can be overwritten using the allow_external parameter.
     * It is not allowed to save pkl files into (critical) system paths.
-    * Extention must be ".pkl" or ".pickle" to prevent overwriting other file-types
+    * Extention must be ['.pkl', '.pickle', '.pklz', '.pbz2'] to prevent overwriting other file-types
     * filepaths are checked on traversal
 
     Security Mechanisms and Purpose
@@ -250,7 +250,7 @@ def save(filepath: str,
     | ------------------------------- | ------------------------------------------------------------- |
     | `allow_external=True`           | Explicit user opt-in to save outside allowed safe directories |
     | System path check               | Prevents saving in critical system paths                      |
-    | Extention check                 | Prevents saving in all kinds of extentions                    |
+    | Extention check                 | Only save with extention: '.pkl', '.pickle', '.pklz', '.pbz2' |
     | Path traversal check            | Prevents directory traversal exploits like `../../etc/passwd` |
     | Audit logs for external saves   | Enables monitoring and traceability of risky saves            |
 
