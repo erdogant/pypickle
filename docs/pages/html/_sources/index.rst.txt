@@ -1,24 +1,28 @@
-pypickle's documentation!
+Pypickle's documentation!
 ==========================
 
 |python| |pypi| |docs| |stars| |LOC| |downloads_month| |downloads_total| |license| |forks| |open issues| |project status| |repo-size| |donate|
 
 
-``pypickle`` is a Python library for saving and loading files in pickle format.
+``pypickle`` is a user-friendly Python library for saving and loading data using the pickle format. Unlike the standard ``pickle`` module, ``pypickle`` puts safety first—offering built-in validation, extension checks, and protection against common exploits.
+Whether you're persisting models, storing session data, or sharing files, ``pypickle`` makes serialization easy *and* more secure.
+Ideal for developers who care about both convenience and peace of mind. ⭐️ **Star it if you like it** ⭐️
 
 
 -----------------------------------
 
 Support
 -----------
-Yes! This library is entirely free but it runs on `coffee <https://buymeacoffee.com/erdogant>`_! :) 
 
-.. raw:: html
+.. tip::
+    Yes! This library is **free** to use! But it runs on `coffee <https://buymeacoffee.com/erdogant>`_! :-) 
 
-    <iframe 
-        srcdoc='<a href="https://www.buymeacoffee.com/erdogant" target="_blank"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&amp;emoji=&amp;slug=erdogant&amp;button_colour=FFDD00&amp;font_colour=000000&amp;font_family=Cookie&amp;outline_colour=000000&amp;coffee_colour=ffffff" /></a>' 
-        style="border:none; width:250px; height:80px;">
-    </iframe>
+    .. raw:: html
+    
+        <iframe 
+            srcdoc='<a href="https://www.buymeacoffee.com/erdogant" target="_blank"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&amp;emoji=&amp;slug=erdogant&amp;button_colour=FFDD00&amp;font_colour=000000&amp;font_family=Cookie&amp;outline_colour=000000&amp;coffee_colour=ffffff" /></a>' 
+            style="border:none; width:250px; height:80px;">
+        </iframe>
 
 
 -----------------------------------
@@ -47,9 +51,17 @@ Content
 
 .. toctree::
   :maxdepth: 1
-  :caption: Tutorials
+  :caption: General
 
-  Save_and_Load
+  general
+
+
+.. toctree::
+  :maxdepth: 1
+  :caption: Save and Load
+
+  save
+  load
 
 
 .. toctree::

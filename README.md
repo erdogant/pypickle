@@ -13,7 +13,10 @@
 
 
 
-pypickle is for saving data and loading the files in pickle format. ⭐️**Star it if you like it**⭐️
+``pypickle`` is a user-friendly Python library for saving and loading data using the pickle format. Unlike the standard ``pickle`` module, ``pypickle`` puts safety first—offering built-in validation, extension checks, and protection against common exploits.
+Whether you're persisting models, storing session data, or sharing files, ``pypickle`` makes serialization easy *and* more secure.
+Ideal for developers who care about both convenience and peace of mind.
+⭐️ **Star it if you like it** ⭐️
 
 ---
 

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pypickle’s documentation! &mdash; pypickle pypickle documentation</title>
+  <title>Pypickle’s documentation! &mdash; pypickle pypickle documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=e0179649" />
@@ -48,13 +48,16 @@
 <li class="toctree-l1"><a class="reference internal" href="Installation.html">Pip install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html#uninstalling">Uninstalling</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<p class="caption" role="heading"><span class="caption-text">General</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html">What is pickling?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#data-modules">Data Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#risk-modules">Risk Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#save">Save</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#load">Load</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general.html">What is pickling?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general.html#data-modules">Data Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general.html#risk-modules">Risk Modules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Save and Load</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="save.html">Save</a></li>
+<li class="toctree-l1"><a class="reference internal" href="load.html">Load</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
@@ -80,7 +83,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">pypickle’s documentation!</li>
+      <li class="breadcrumb-item active">Pypickle’s documentation!</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -91,17 +94,22 @@
            <div itemprop="articleBody">
              
   <section id="pypickle-s-documentation">
-<h1>pypickle’s documentation!<a class="headerlink" href="#pypickle-s-documentation" title="Link to this heading"></a></h1>
+<h1>Pypickle’s documentation!<a class="headerlink" href="#pypickle-s-documentation" title="Link to this heading"></a></h1>
 <p><a class="reference external" href="https://erdogant.github.io/pypickle/"><img alt="|Python" src="https://img.shields.io/pypi/pyversions/pypickle.svg" /></a> <a class="reference external" href="https://pypi.org/project/pypickle/"><img alt="|Python Version" src="https://img.shields.io/pypi/v/pypickle.svg" /></a> <a class="reference external" href="https://erdogant.github.io/pypickle/"><img alt="Sphinx documentation" src="https://img.shields.io/badge/Sphinx-Docs-blue.svg" /></a> <a class="reference external" href="https://img.shields.io/github/stars/erdogant/pypickle"><img alt="Stars" src="https://img.shields.io/github/stars/erdogant/pypickle" /></a> <a class="reference external" href="https://github.com/erdogant/pypickle"><img alt="lines of code" src="https://sloc.xyz/github/erdogant/pypickle/?category=code" /></a> <a class="reference external" href="https://pepy.tech/project/pypickle"><img alt="Downloads per month" src="https://static.pepy.tech/personalized-badge/pypickle?period=month&amp;units=international_system&amp;left_color=grey&amp;right_color=brightgreen&amp;left_text=PyPI%20downloads/month" /></a> <a class="reference external" href="https://pepy.tech/project/pypickle"><img alt="Downloads in total" src="https://static.pepy.tech/personalized-badge/pypickle?period=total&amp;units=international_system&amp;left_color=grey&amp;right_color=brightgreen&amp;left_text=Downloads" /></a> <a class="reference external" href="https://github.com/erdogant/pypickle/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-green.svg" /></a> <a class="reference external" href="https://github.com/erdogant/pypickle/network"><img alt="Github Forks" src="https://img.shields.io/github/forks/erdogant/pypickle.svg" /></a> <a class="reference external" href="https://github.com/erdogant/pypickle/issues"><img alt="Open Issues" src="https://img.shields.io/github/issues/erdogant/pypickle.svg" /></a> <a class="reference external" href="http://www.repostatus.org/#active"><img alt="Project Status" src="http://www.repostatus.org/badges/latest/active.svg" /></a> <a class="reference external" href="https://img.shields.io/github/repo-size/erdogant/pypickle"><img alt="repo-size" src="https://img.shields.io/github/repo-size/erdogant/pypickle" /></a> <a class="reference external" href="https://erdogant.github.io/pypickle/pages/html/Documentation.html#"><img alt="donate" src="https://img.shields.io/badge/Support%20this%20project-grey.svg?logo=github%20sponsors" /></a></p>
-<p><code class="docutils literal notranslate"><span class="pre">pypickle</span></code> is a Python library for saving and loading files in pickle format.</p>
+<p><code class="docutils literal notranslate"><span class="pre">pypickle</span></code> is a user-friendly Python library for saving and loading data using the pickle format. Unlike the standard <code class="docutils literal notranslate"><span class="pre">pickle</span></code> module, <code class="docutils literal notranslate"><span class="pre">pypickle</span></code> puts safety first—offering built-in validation, extension checks, and protection against common exploits.
+Whether you’re persisting models, storing session data, or sharing files, <code class="docutils literal notranslate"><span class="pre">pypickle</span></code> makes serialization easy <em>and</em> more secure.
+Ideal for developers who care about both convenience and peace of mind. ⭐️ <strong>Star it if you like it</strong> ⭐️</p>
 <hr class="docutils" />
 <section id="support">
 <h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
-<p>Yes! This library is entirely free but it runs on <a class="reference external" href="https://buymeacoffee.com/erdogant">coffee</a>! :)</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Yes! This library is <strong>free</strong> to use! But it runs on <a class="reference external" href="https://buymeacoffee.com/erdogant">coffee</a>! :-)</p>
 <iframe
     srcdoc='<a href="https://www.buymeacoffee.com/erdogant" target="_blank"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&amp;emoji=&amp;slug=erdogant&amp;button_colour=FFDD00&amp;font_colour=000000&amp;font_family=Cookie&amp;outline_colour=000000&amp;coffee_colour=ffffff" /></a>'
     style="border:none; width:250px; height:80px;">
-</iframe><hr class="docutils" />
+</iframe></div>
+<hr class="docutils" />
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><strong>Your ❤️ is important to keep maintaining this package.</strong> You can <a class="reference external" href="https://erdogant.github.io/pypickle/pages/html/Documentation.html">support</a> in various ways, have a look at the <a class="reference external" href="https://erdogant.github.io/pypickle/pages/html/Documentation.html">sponser page</a>.
@@ -123,13 +131,18 @@ Report bugs, issues and feature extensions at <a class="reference external" href
 </ul>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<p class="caption" role="heading"><span class="caption-text">General</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html">What is pickling?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#data-modules">Data Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#risk-modules">Risk Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#save">Save</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Save_and_Load.html#load">Load</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general.html">What is pickling?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general.html#data-modules">Data Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general.html#risk-modules">Risk Modules</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Save and Load</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="save.html">Save</a></li>
+<li class="toctree-l1"><a class="reference internal" href="load.html">Load</a></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
