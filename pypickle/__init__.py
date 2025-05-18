@@ -6,6 +6,9 @@ from pypickle.pypickle import (
     check_logger,
     validate_modules,
     get_risk_modules,
+    get_critical_paths,
+    is_critical_path,
+    get_allowed_paths,
 )
 
 __author__ = 'Erdogan Tasksen'

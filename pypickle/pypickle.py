@@ -91,6 +91,69 @@ def get_risk_modules():
 #     ]
 #     return allowed_modules
 
+def get_critical_paths(custom_path=None):
+    """Get critical paths.
+
+    Cross-platform safety: Including all known critical paths is a defensive design.
+    his approach makes your security policy more fail-safe and portable. It prevents users from accidentally saving into a sensitive path,
+    even if the code is being executed in a cross-platform environment like Docker,  Networked/shared drives,  Remote SSH sessions,  CI pipelines.
+
+    Parameters
+    ----------
+    custom_path : [str, list], optional
+        User defined custom critical path is appended to the existing critical paths.
+
+    Returns
+    -------
+    CRITICAL_PATHS : list
+
+    """
+    CRITICAL_PATHS = [
+        # Universal Unix system directories
+        "/bin", "/boot", "/dev", "/etc", "/lib", "/lib64",
+        "/proc", "/root", "/sbin", "/sys", "/usr", "/var",
+
+        # Sensitive user configuration
+        os.path.expanduser("~/.ssh"),
+        os.path.expanduser("~/.gnupg"),
+        os.path.expanduser("~/.config"),
+        os.path.expanduser("~/.local/share"),
+
+        # macOS specific
+        "/System",             # System-critical files
+        "/Library",            # System-wide libraries
+        "/Network",            # Network mounts
+        "/private",            # Contains /etc, /var, etc. on macOS
+        "/Volumes",            # Mounted disk volumes
+        "/Applications",       # Installed apps
+        "/usr/local/bin",      # Homebrew & CLI tools
+
+        # Windows specific
+        "C:\\Windows", "C:\\Windows\\System32", "C:\\Program Files",
+        "C:\\Program Files (x86)", "C:\\ProgramData", "C:\\Recovery",
+        os.path.expandvars("%APPDATA%"), os.path.expandvars("%LOCALAPPDATA%")
+    ]
+
+    if isinstance(custom_path, str): custom_path = [custom_path]
+    if isinstance(custom_path, list):
+        CRITICAL_PATHS = CRITICAL_PATHS + custom_path
+    # Return
+    return CRITICAL_PATHS
+
+def get_allowed_paths(custom_path=None):
+    # Define allowed base directories
+    ALLOWED_SAVE_PATHS = [
+        os.path.abspath(os.getcwd()),           # Current working dir
+        os.path.expanduser("~"),                # User's home dir
+        tempfile.gettempdir()                   # OS temp dir
+    ]
+
+    if isinstance(custom_path, str): custom_path = [custom_path]
+    if isinstance(custom_path, list):
+        ALLOWED_SAVE_PATHS = ALLOWED_SAVE_PATHS + custom_path
+    # Return
+    return ALLOWED_SAVE_PATHS
+
 #%%
 def is_safe_path(path: str, allowed_dirs: list) -> bool:
     """Safely check if path is within allowed base directories, even across drives."""
@@ -108,16 +171,89 @@ def is_safe_path(path: str, allowed_dirs: list) -> bool:
     return False
 
 
+def is_critical_path(filepath: str, critical_paths, allowed_subpaths=None) -> bool:
+    """
+    Check if a given filepath points to or is nested inside a critical system path,
+    unless it falls under explicitly allowed subpaths.
+
+    Parameters
+    ----------
+    filepath : str
+        The target path to check.
+    critical_paths : list or None
+        List of system-critical base paths to protect.
+    allowed_subpaths : list or None
+        List of subpaths that are considered safe even if under a critical path.
+
+    Returns
+    -------
+    bool
+        True if the filepath is within a critical path (and not explicitly allowed).
+
+    Notes
+    -----
+    - Handles cross-platform path resolution.
+    - Allows exceptions for safe subdirectories like temp folders.
+
+    Examples
+    --------
+    >>> import pypickle
+    >>> import os
+    >>> CRITICAL_PATHS = ["/etc", "/usr", "C:\\Windows", os.getenv("LOCALAPPDATA")]
+    >>> ALLOWED_SUBPATHS = pypickle.get_allowed_paths()
+    >>> pypickle.is_critical_path("C:\\Users\\User\\AppData\\Local\\Temp\\myfile.pkl", CRITICAL_PATHS, ALLOWED_SUBPATHS)
+    False
+    >>> pypickle.is_critical_path("C:\\Windows\\System32\\config.sys", CRITICAL_PATHS, ALLOWED_SUBPATHS)
+    True
+    """
+    if critical_paths is None:
+        return False
+
+    abs_path = os.path.abspath(filepath)
+
+    # Skip check if explicitly allowed
+    if allowed_subpaths:
+        for allowed in allowed_subpaths:
+            try:
+                allowed_abs = os.path.abspath(allowed)
+                if os.path.commonpath([abs_path, allowed_abs]) == allowed_abs:
+                    return False
+            except ValueError:
+                continue
+
+    # Block if under critical
+    for crit in critical_paths:
+        try:
+            crit_path = os.path.abspath(crit)
+            if os.path.commonpath([abs_path, crit_path]) == crit_path:
+                logger.warning(f'[BLOCKED]: Filepath: [{filepath}] is under critical path: [{crit}]')
+                return True
+        except ValueError:
+            continue
+
+    return False
+
+
 # %% Save pickle file
-def save(filepath: str, var, overwrite: bool = False, fix_imports: bool = True, allow_external: bool = False, verbose: str = 'info'):
+def save(filepath: str,
+         var,
+         overwrite: bool = False,
+         fix_imports: bool = True,
+         allow_external: bool = False,
+         verbose: str = 'info',
+         ):
     """
     Save pickle file for input variables.
+    Before saving, there are various security checks:
+    * The filepath should be inside the safe paths (user and temp directories). However, this can be overwritten using the allow_external parameter.
+    * It is not allowed to save pkl files into (critical) system paths.
+    * filepaths are checked on traversal
 
     Security Mechanisms and Purpose
     | Mechanism                       | Purpose                                                       |
     | ------------------------------- | ------------------------------------------------------------- |
-    | `allow_external=True`           | Explicit user opt-in to save outside allowed directories      |
-    | `is_safe_path()` fallback check | Ensures path validation logic is enforced                     |
+    | `allow_external=True`           | Explicit user opt-in to save outside allowed safe directories |
+    | System path check               | Prevents saving in critical system paths                      |
     | Path traversal check            | Prevents directory traversal exploits like `../../etc/passwd` |
     | Audit logs for external saves   | Enables monitoring and traceability of risky saves            |
 
@@ -132,7 +268,7 @@ def save(filepath: str, var, overwrite: bool = False, fix_imports: bool = True, 
     fix_imports : bool, optional (default=True)
         Fixes imports for compatibility with Python 2 pickle streams.
     allow_external : bool, optional (default=False)
-        Allow saving outside predefined safe directories (explicit opt-in).
+        Allow saving outside predefined safe directories (explicit opt-in). The safe paths are: user and temp directories.
     verbose : str or int, optional (default='info')
         Logging verbosity level: 'debug', 'info', 'warn', 'error', 'silent'.
 
@@ -144,9 +280,14 @@ def save(filepath: str, var, overwrite: bool = False, fix_imports: bool = True, 
     Example
     -------
     >>> import pypickle
+    >>> import os
+    >>> import tempfile
+    >>>>
     >>> filepath = r'c:/temp/test.pkl'
     >>> data = [1,2,3,4,5]
     >>> status = pypickle.save(filepath, data)
+    >>> status = pypickle.save(filepath, data, allow_external=True)
+    >>> status = pypickle.save(filepath, data, allow_external=True, overwrite=True)
     >>> #
     >>> filepath = os.path.join(tempfile.gettempdir(), "test.pkl")
     >>> status = pypickle.save(filepath, data)
@@ -156,41 +297,52 @@ def save(filepath: str, var, overwrite: bool = False, fix_imports: bool = True, 
     >>> status = pypickle.save(filepath, data)
     >>> status = pypickle.save(filepath, data, overwrite=True)
     >>> status = pypickle.save(filepath, data, overwrite=True, allow_external=True)
+    >>> #
+    >>> filepath = r'C://test.pkl'
+    >>> data = [1,2,3,4,5]
+    >>> status = pypickle.save(filepath, data)
+    >>> status = pypickle.save(filepath, data, allow_external=True, overwrite=True)
+    >>> #
+    >>> filepath = "C:\\Users\\User\\AppData\\Local\\Temp\\myfile.pkl"
+    >>> data = [1,2,3,4,5]
+    >>> status = pypickle.save(filepath, data)
+    >>> status = pypickle.save(filepath, data, allow_external=True)
 
     """
     # Set logger
     set_logger(verbose)
+    # Default save paths
+    ALLOWED_PATHS = get_allowed_paths()
+    # default critical paths
+    CRITICAL_PATHS = get_critical_paths()
 
-    # Define allowed base directories
-    ALLOWED_SAVE_PATHS = [
-        os.path.abspath(os.getcwd()),           # Current working dir
-        os.path.expanduser("~"),                # User's home dir
-        tempfile.gettempdir()                   # OS temp dir
-    ]
+    if is_critical_path(filepath, CRITICAL_PATHS, ALLOWED_PATHS):
+        logger.warning(f'Unsafe save attempt blocked: {filepath} is in a critical path.')
+        return False
 
-    if not is_safe_path(filepath, ALLOWED_SAVE_PATHS):
+    if not is_safe_path(filepath, ALLOWED_PATHS):
         if not allow_external:
-            logger.warning(f'Unsafe save attempt blocked: {filepath} not in allowed directories.')
+            logger.warning(f'[BLOCKED]: Unsafe [save] attempt blocked: [{filepath}] not in allowed directories.')
             return False
         else:
-            logger.warning(f'Unsafe save allowed by user override: {filepath}')
+            logger.warning(f'[OVERRIDE]: Unsafe [save] allowed by user override: [{filepath}]')
 
     # Check if directory exists
     if os.path.isdir(filepath):
-        logger.error(f'File not saved: Filepath is a directory, expected a file: {filepath}')
+        logger.error(f'[FAILED]: File not saved. Filepath is a directory, expected a file: [{filepath}]')
         return False
 
     if os.path.isfile(filepath) and not overwrite:
-        logger.warning(f'File not saved: File already exists and overwrite=False: {filepath}')
+        logger.warning(f'[FAILED]: File not saved. File already exists: [{filepath}]')
         return False
 
     try:
         with open(filepath, 'wb') as outfile:
             pickle.dump(var, outfile, fix_imports=fix_imports)
-        logger.info(f'Pickle file saved: {filepath}')
+        logger.info(f'[SUCCES]: Pickle file saved: [{filepath}]')
         return True
     except Exception as e:
-        logger.error(f'Failed to save pickle file: {filepath}. Error: {e}')
+        logger.error(f'[FAILED]: pickle file is not saved: [{filepath}]. Error: {e}')
         return False
 
 
@@ -226,7 +378,7 @@ def load(filepath: str,
     validate : bool or list, default=True
         - True: Validate with default safe module list.
         - False: Disable all validation (use at own risk).
-        - list: modules that are allowed based on name prefixes.
+        - list: ['nt', 'sklearn', 'pandas'] : modules that are allowed based on name prefixes.
     verbose : str
         Verbosity level (not used here, placeholder).
 
