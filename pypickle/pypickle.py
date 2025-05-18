@@ -312,20 +312,16 @@ def save(filepath: str,
     """
     # Set logger
     set_logger(verbose)
-    # Default save paths
-    ALLOWED_PATHS = get_allowed_paths()
-    # default critical paths
-    CRITICAL_PATHS = get_critical_paths()
 
     if not is_known_extension(filepath):
-        logger.warning(f'[BLOCKED]: Extention must be of type ".pkl" or ".pickle": [{filepath}] is not allowed.')
+        logger.warning(f"[BLOCKED]: Extention must be of type ['.pkl', '.pickle', '.pklz', '.pbz2']: [{filepath}] is not allowed.")
         return False
 
-    if is_critical_path(filepath, CRITICAL_PATHS, ALLOWED_PATHS):
-        logger.warning(f'Unsafe save attempt blocked: {filepath} is in a critical path.')
+    if is_critical_path(filepath):
+        logger.warning(f'[BLOCKED]: Unsafe save attempt blocked: {filepath} is in a critical path.')
         return False
 
-    if not is_safe_path(filepath, ALLOWED_PATHS):
+    if not is_safe_path(filepath):
         if not allow_external:
             logger.warning(f'[BLOCKED]: Unsafe [save] attempt blocked: [{filepath}] not in allowed directories.')
             return False
