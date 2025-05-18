@@ -12,10 +12,8 @@ import pickle
 import os
 import re
 import logging
-import builtins
-from typing import Union, List, Set
+from typing import Union
 import pickletools
-from collections import defaultdict
 import tempfile
 
 logger = logging.getLogger(__name__)
@@ -54,42 +52,6 @@ def get_risk_modules():
     ]
     return risk_modules
 
-# def get_allowed_modules():
-#     """Allowed modules.
-#     These modules are allowed.
-
-#     Returns
-#     -------
-#     list
-
-#     """
-#     allowed_modules = [
-#     'builtins',         # Basic Python types and functions
-#     'collections',      # e.g., defaultdict, OrderedDict
-#     'datetime',         # e.g., datetime, timedelta
-#     'types',            # e.g., SimpleNamespace
-#     'math',             # Common math functions (sqrt, sin, etc.)
-#     'decimal',          # Safer numerical precision
-#     'fractions',        # Fractional arithmetic
-#     're',               # Regular expressions (safe)
-#     'copyreg',          # Used internally by pickle
-#     'functools',        # e.g., partial, reduce
-#     'operator',         # Functional ops (add, mul, etc.)
-#     'itertools',        # Combinatorics
-#     'pprint',           # Pretty printing (often in configs)
-#     'numpy',            # Safe numerical arrays
-#     'pandas',           # Tabular data handling
-#     'sklearn',          # ML models (as long as no shelling)
-#     'joblib',           # Often used with sklearn
-#     'scipy',            # Scientific computing
-#     'matplotlib',       # For serialized plots
-#     'seaborn',          # Visualization
-#     'statsmodels',      # Statistical models
-#     'networkx',         # Graph objects
-#     'graphviz',         # For exported graph pipelines
-#     'pathlib',          # Filesystem paths (safe unless misused)
-#     ]
-#     return allowed_modules
 
 def get_critical_paths(custom_path=None):
     """Get critical paths.
