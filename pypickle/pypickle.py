@@ -117,8 +117,10 @@ def get_allowed_paths(custom_path=None):
     return ALLOWED_SAVE_PATHS
 
 #%%
-def is_safe_path(path: str, allowed_dirs: list) -> bool:
+def is_safe_path(path: str) -> bool:
     """Safely check if path is within allowed base directories, even across drives."""
+    # Default save paths
+    allowed_dirs = get_allowed_paths()
     abs_path = os.path.abspath(path)
 
     for base in allowed_dirs:
@@ -133,7 +135,7 @@ def is_safe_path(path: str, allowed_dirs: list) -> bool:
     return False
 
 
-def is_critical_path(filepath: str, critical_paths, allowed_subpaths=None) -> bool:
+def is_critical_path(filepath: str) -> bool:
     """
     Check if a given filepath points to or is nested inside a critical system path,
     unless it falls under explicitly allowed subpaths.
@@ -161,13 +163,15 @@ def is_critical_path(filepath: str, critical_paths, allowed_subpaths=None) -> bo
     --------
     >>> import pypickle
     >>> import os
-    >>> CRITICAL_PATHS = ["/etc", "/usr", "C:\\Windows", os.getenv("LOCALAPPDATA")]
-    >>> ALLOWED_SUBPATHS = pypickle.get_allowed_paths()
-    >>> pypickle.is_critical_path("C:\\Users\\User\\AppData\\Local\\Temp\\myfile.pkl", CRITICAL_PATHS, ALLOWED_SUBPATHS)
+    >>> pypickle.is_critical_path("C:\\Users\\User\\AppData\\Local\\Temp\\myfile.pkl")
     False
-    >>> pypickle.is_critical_path("C:\\Windows\\System32\\config.sys", CRITICAL_PATHS, ALLOWED_SUBPATHS)
+    >>> pypickle.is_critical_path("C:\\Windows\\System32\\config.sys")
     True
     """
+    allowed_subpaths = get_allowed_paths()
+    # default critical paths
+    critical_paths = get_critical_paths()
+
     if critical_paths is None:
         return False
 
@@ -428,17 +432,8 @@ def load(filepath: str,
     set_logger(verbose)
     # Check validate
     if isinstance(validate, str): validate = [validate]
-
+    # User custom allow list (empty but maybe for future usage)
     allowlist = []
-    # # Check allowlist
-    # if isinstance(allowlist, str) and allowlist == 'default':
-    #     logger.info('Allowing default (trusted) modules.')
-    #     allowlist = get_allowed_modules()
-    # elif allowlist is None:
-    #     allowlist = []
-    # else:
-    #     logger.error('Parameter <allowlist> is invalid.')
-    #     return False
 
     # Check file
     if not os.path.isfile(filepath):
@@ -450,8 +445,10 @@ def load(filepath: str,
     if isinstance(validate, list) or validate is True:
         # Add custom modules to the defaults
         user_modules = validate + allowlist if isinstance(validate, list) else None
+        # Validate and then load
         return load_and_validate(filepath, fix_imports, encoding, errors, user_modules)
     else:
+        # Load without validation
         return load_pickle(filepath, fix_imports, encoding, errors)
 
 
