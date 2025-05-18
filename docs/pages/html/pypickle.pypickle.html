@@ -69,8 +69,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.check_logger"><code class="docutils literal notranslate"><span class="pre">check_logger()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.clean"><code class="docutils literal notranslate"><span class="pre">clean()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.convert_verbose_to_new"><code class="docutils literal notranslate"><span class="pre">convert_verbose_to_new()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.get_allowed_paths"><code class="docutils literal notranslate"><span class="pre">get_allowed_paths()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.get_critical_paths"><code class="docutils literal notranslate"><span class="pre">get_critical_paths()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.get_risk_modules"><code class="docutils literal notranslate"><span class="pre">get_risk_modules()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.is_critical_path"><code class="docutils literal notranslate"><span class="pre">is_critical_path()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.is_known_extension"><code class="docutils literal notranslate"><span class="pre">is_known_extension()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.is_safe_path"><code class="docutils literal notranslate"><span class="pre">is_safe_path()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pypickle.pypickle.load_and_validate"><code class="docutils literal notranslate"><span class="pre">load_and_validate()</span></code></a></li>
@@ -181,6 +185,31 @@ needed.  Both arguments passed are str objects.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pypickle.pypickle.get_allowed_paths">
+<span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">get_allowed_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">custom_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypickle.pypickle.get_allowed_paths" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pypickle.pypickle.get_critical_paths">
+<span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">get_critical_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">custom_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypickle.pypickle.get_critical_paths" title="Link to this definition"></a></dt>
+<dd><p>Get critical paths.</p>
+<p>Cross-platform safety: Including all known critical paths is a defensive design.
+his approach makes your security policy more fail-safe and portable. It prevents users from accidentally saving into a sensitive path,
+even if the code is being executed in a cross-platform environment like Docker,  Networked/shared drives,  Remote SSH sessions,  CI pipelines.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>custom_path</strong> (<em>[</em><em>str</em><em>, </em><em>list</em><em>]</em><em>, </em><em>optional</em>) – User defined custom critical path is appended to the existing critical paths.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>CRITICAL_PATHS</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pypickle.pypickle.get_logger">
 <span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypickle.pypickle.get_logger" title="Link to this definition"></a></dt>
 <dd><p>Return logger status.</p>
@@ -202,8 +231,74 @@ These modules can be used for code execution, filesystem manipulation, networkin
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pypickle.pypickle.is_critical_path">
+<span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">is_critical_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypickle.pypickle.is_critical_path" title="Link to this definition"></a></dt>
+<dd><p>Check if a given filepath points to or is nested inside a critical system path,
+unless it falls under explicitly allowed subpaths.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>str</em>) – The target path to check.</p></li>
+<li><p><strong>critical_paths</strong> (<em>list</em><em> or </em><em>None</em>) – List of system-critical base paths to protect.</p></li>
+<li><p><strong>allowed_subpaths</strong> (<em>list</em><em> or </em><em>None</em>) – List of subpaths that are considered safe even if under a critical path.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the filepath is within a critical path (and not explicitly allowed).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Handles cross-platform path resolution.</p></li>
+<li><p>Allows exceptions for safe subdirectories like temp folders.</p></li>
+</ul>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pypickle</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pypickle</span><span class="o">.</span><span class="n">is_critical_path</span><span class="p">(</span><span class="s2">&quot;C:\Users\User\AppData\Local\Temp\myfile.pkl&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pypickle</span><span class="o">.</span><span class="n">is_critical_path</span><span class="p">(</span><span class="s2">&quot;C:\Windows\System32\config.sys&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pypickle.pypickle.is_known_extension">
+<span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">is_known_extension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_extensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypickle.pypickle.is_known_extension" title="Link to this definition"></a></dt>
+<dd><p>Check if the file has an allowed extension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>str</em>) – The file path to validate.</p></li>
+<li><p><strong>allowed_extensions</strong> (<em>list</em><em> or </em><em>None</em>) – List of allowed file extensions (with dot), e.g., [‘.pkl’, ‘.pickle’, ‘.joblib’].
+If None, defaults to common pickle-related formats.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the extension is in the allowed list, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">is_known_extension</span><span class="p">(</span><span class="s2">&quot;data.pkl&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_known_extension</span><span class="p">(</span><span class="s2">&quot;config.yaml&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_known_extension</span><span class="p">(</span><span class="s2">&quot;model.joblib&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;.joblib&#39;</span><span class="p">])</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pypickle.pypickle.is_safe_path">
-<span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">is_safe_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_dirs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypickle.pypickle.is_safe_path" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">is_safe_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypickle.pypickle.is_safe_path" title="Link to this definition"></a></dt>
 <dd><p>Safely check if path is within allowed base directories, even across drives.</p>
 </dd></dl>
 
@@ -230,7 +325,7 @@ pickle files that contain risky modules, i.e., those that can automatically make
 <li><p><strong>validate</strong> (<em>bool</em><em> or </em><em>list</em><em>, </em><em>default=True</em>) – <ul>
 <li><p>True: Validate with default safe module list.</p></li>
 <li><p>False: Disable all validation (use at own risk).</p></li>
-<li><p>list: modules that are allowed based on name prefixes.</p></li>
+<li><p>list: [‘nt’, ‘sklearn’, ‘pandas’] : modules that are allowed based on name prefixes.</p></li>
 </ul>
 </p></li>
 <li><p><strong>verbose</strong> (<em>str</em>) – Verbosity level (not used here, placeholder).</p></li>
@@ -312,12 +407,18 @@ pickle files that contain risky modules, i.e., those that can automatically make
 <dl class="py function">
 <dt class="sig sig-object py" id="pypickle.pypickle.save">
 <span class="sig-prename descclassname"><span class="pre">pypickle.pypickle.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fix_imports</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_external</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'info'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypickle.pypickle.save" title="Link to this definition"></a></dt>
-<dd><p>Save pickle file for input variables.</p>
+<dd><p>Save pickle file for input variables.
+Before saving, there are various security checks:
+* The filepath should be inside the safe paths (user and temp directories). However, this can be overwritten using the allow_external parameter.
+* It is not allowed to save pkl files into (critical) system paths.
+* Extention must be [‘.pkl’, ‘.pickle’, ‘.pklz’, ‘.pbz2’] to prevent overwriting other file-types
+* filepaths are checked on traversal</p>
 <p>Security Mechanisms and Purpose
 | Mechanism                       | Purpose                                                       |
 | ——————————- | ————————————————————- |
-| <cite>allow_external=True</cite>           | Explicit user opt-in to save outside allowed directories      |
-| <cite>is_safe_path()</cite> fallback check | Ensures path validation logic is enforced                     |
+| <cite>allow_external=True</cite>           | Explicit user opt-in to save outside allowed safe directories |
+| System path check               | Prevents saving in critical system paths                      |
+| Extention check                 | Only save with extention: ‘.pkl’, ‘.pickle’, ‘.pklz’, ‘.pbz2’ |
 | Path traversal check            | Prevents directory traversal exploits like <cite>../../etc/passwd</cite> |
 | Audit logs for external saves   | Enables monitoring and traceability of risky saves            |</p>
 <dl class="field-list simple">
@@ -327,7 +428,7 @@ pickle files that contain risky modules, i.e., those that can automatically make
 <li><p><strong>var</strong> (<em>object</em>) – Any Python object (list, dict, DataFrame, etc.) to be stored.</p></li>
 <li><p><strong>overwrite</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Whether to overwrite the file if it already exists.</p></li>
 <li><p><strong>fix_imports</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – Fixes imports for compatibility with Python 2 pickle streams.</p></li>
-<li><p><strong>allow_external</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Allow saving outside predefined safe directories (explicit opt-in).</p></li>
+<li><p><strong>allow_external</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Allow saving outside predefined safe directories (explicit opt-in). The safe paths are: user and temp directories.</p></li>
 <li><p><strong>verbose</strong> (<em>str</em><em> or </em><em>int</em><em>, </em><em>optional</em><em> (</em><em>default='info'</em><em>)</em>) – Logging verbosity level: ‘debug’, ‘info’, ‘warn’, ‘error’, ‘silent’.</p></li>
 </ul>
 </dd>
@@ -340,7 +441,16 @@ pickle files that contain risky modules, i.e., those that can automatically make
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pypickle</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">filepath</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;c:/temp/test.pkl&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">allow_external</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">allow_external</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">filepath</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;c:/temp/test.bat&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1">#</span>
@@ -352,6 +462,16 @@ pickle files that contain risky modules, i.e., those that can automatically make
 <span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_external</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">filepath</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;C://test.pkl&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">allow_external</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">filepath</span> <span class="o">=</span> <span class="s2">&quot;C:\Users\User\AppData\Local\Temp\myfile.pkl&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">allow_external</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

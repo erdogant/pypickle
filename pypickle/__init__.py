@@ -1,7 +1,7 @@
 import logging
 from pypickle.pypickle import (
     save,
-	load,
+    load,
     clean,
     check_logger,
     validate_modules,
@@ -9,7 +9,7 @@ from pypickle.pypickle import (
     get_critical_paths,
     is_critical_path,
     get_allowed_paths,
-)
+    )
 
 __author__ = 'Erdogan Tasksen'
 __email__ = 'erdogant@gmail.com'
