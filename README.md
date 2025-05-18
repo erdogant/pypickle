@@ -26,6 +26,10 @@ Ideal for developers who care about both convenience and peace of mind.
 |--------|-------------|
 | [**Load**](https://erdogant.github.io/pypickle/pages/html/Parametric.html) | Load your pickle files. |
 | [**Save**](https://erdogant.github.io/pypickle/pages/html/Save_and_Load.html#saving) | Save your files into pickle format. |
+| [**is_critical_path**](https://erdogant.github.io/pypickle/pages/html/pypickle.pypickle.html#pypickle.pypickle.is_critical_path) | Check whether filepath is critical. |
+| [**get_critical_paths**](https://erdogant.github.io/pypickle/pages/html/pypickle.pypickle.html#pypickle.pypickle.get_critical_paths) | Get critical paths. |
+| [**get_risk_modules**](https://erdogant.github.io/pypickle/pages/html/pypickle.pypickle.html#pypickle.pypickle.get_risk_modules) | Get risk modules. |
+| [**get_allowed_paths**](https://erdogant.github.io/pypickle/pages/html/pypickle.pypickle.html#pypickle.pypickle.get_allowed_paths) | Get allowed paths. |
 
 ---
 
