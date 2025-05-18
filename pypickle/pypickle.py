@@ -234,6 +234,39 @@ def is_critical_path(filepath: str, critical_paths, allowed_subpaths=None) -> bo
     return False
 
 
+def is_known_extension(filepath: str, allowed_extensions=None) -> bool:
+    """
+    Check if the file has an allowed extension.
+
+    Parameters
+    ----------
+    filepath : str
+        The file path to validate.
+    allowed_extensions : list or None
+        List of allowed file extensions (with dot), e.g., ['.pkl', '.pickle', '.joblib'].
+        If None, defaults to common pickle-related formats.
+
+    Returns
+    -------
+    bool
+        True if the extension is in the allowed list, False otherwise.
+
+    Examples
+    --------
+    >>> is_known_extension("data.pkl")
+    True
+    >>> is_known_extension("config.yaml")
+    False
+    >>> is_known_extension("model.joblib", ['.joblib'])
+    True
+    """
+    if allowed_extensions is None:
+        allowed_extensions = ['.pkl', '.pickle']
+
+    _, ext = os.path.splitext(filepath)
+    return ext.lower() in allowed_extensions
+
+
 # %% Save pickle file
 def save(filepath: str,
          var,
@@ -247,6 +280,7 @@ def save(filepath: str,
     Before saving, there are various security checks:
     * The filepath should be inside the safe paths (user and temp directories). However, this can be overwritten using the allow_external parameter.
     * It is not allowed to save pkl files into (critical) system paths.
+    * Extention must be ".pkl" or ".pickle" to prevent overwriting other file-types
     * filepaths are checked on traversal
 
     Security Mechanisms and Purpose
@@ -254,6 +288,7 @@ def save(filepath: str,
     | ------------------------------- | ------------------------------------------------------------- |
     | `allow_external=True`           | Explicit user opt-in to save outside allowed safe directories |
     | System path check               | Prevents saving in critical system paths                      |
+    | Extention check                 | Prevents saving in all kinds of extentions                    |
     | Path traversal check            | Prevents directory traversal exploits like `../../etc/passwd` |
     | Audit logs for external saves   | Enables monitoring and traceability of risky saves            |
 
@@ -282,12 +317,16 @@ def save(filepath: str,
     >>> import pypickle
     >>> import os
     >>> import tempfile
-    >>>>
+    >>>
     >>> filepath = r'c:/temp/test.pkl'
     >>> data = [1,2,3,4,5]
     >>> status = pypickle.save(filepath, data)
     >>> status = pypickle.save(filepath, data, allow_external=True)
     >>> status = pypickle.save(filepath, data, allow_external=True, overwrite=True)
+    >>> #
+    >>> filepath = r'c:/temp/test.bat'
+    >>> data = [1,2,3,4,5]
+    >>> status = pypickle.save(filepath, data)
     >>> #
     >>> filepath = os.path.join(tempfile.gettempdir(), "test.pkl")
     >>> status = pypickle.save(filepath, data)
@@ -315,6 +354,10 @@ def save(filepath: str,
     ALLOWED_PATHS = get_allowed_paths()
     # default critical paths
     CRITICAL_PATHS = get_critical_paths()
+
+    if not is_known_extension(filepath):
+        logger.warning(f'[BLOCKED]: Extention must be of type ".pkl" or ".pickle": [{filepath}] is not allowed.')
+        return False
 
     if is_critical_path(filepath, CRITICAL_PATHS, ALLOWED_PATHS):
         logger.warning(f'Unsafe save attempt blocked: {filepath} is in a critical path.')

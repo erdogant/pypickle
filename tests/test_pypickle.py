@@ -27,7 +27,14 @@ def test_logger():
 def test_save():
     data = [1,2,3,4,5]
     assert pypickle.save('test.pkl', data, overwrite=True)
-    assert pypickle.save('test.pkl', data, overwrite=False) == False
+    assert not pypickle.save('test.pkl', data, overwrite=False)
+
+def test_save_ext():
+    data = [1,2,3,4,5]
+    assert not pypickle.save('test.bat', data, overwrite=True)
+    assert not pypickle.save('test', data, overwrite=True)
+    assert pypickle.save('test.pkl', data, overwrite=True)
+    assert pypickle.save('test.pickle', data, overwrite=True)
 
 def test_load():
     data = [1,2,3,4,5]
