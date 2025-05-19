@@ -5,6 +5,86 @@ A pickle file is loaded using the function :func:`pypickle.pypickle.load`.
 Because of security reasons, that are various restrictions for loading.
 
 
+Risk Modules
+===========================
+
+Risk modules refer to Python modules that, when deserialized using ``pickle``, may execute unintended or harmful code due to their built-in capabilities.
+Modules such as ``os``, ``subprocess``, ``sys``, or custom classes with overridden ``__reduce__`` or ``__setstate__`` methods can introduce severe security risks during unpickling.
+These modules are often classified as *high-risk* because they enable file system access, process execution, or system-level interactions.
+To mitigate these threats, ``pypickle`` includes validation mechanisms that block or explicitly require user approval for such modules before loading, ensuring safer handling of untrusted pickle files.
+
+
+.. list-table:: Risky Modules Blocked by Default
+   :widths: 25 75
+   :header-rows: 1
+
+   * - Module or Function
+     - Risk / Reason for Blocking
+   * - os.system
+     - Execute shell commands
+   * - os.popen
+     - Open pipe to or from command
+   * - os.execve
+     - Execute a new program, replacing the current process
+   * - os.remove
+     - Remove files (can delete data)
+   * - os.rmdir
+     - Remove directories
+   * - os.makedirs
+     - Make directories (can modify filesystem)
+   * - subprocess
+     - Arbitrary system command execution
+   * - subprocess.Popen
+     - Start subprocess with pipe access
+   * - subprocess.call
+     - Run system commands
+   * - sys.exit
+     - Exit interpreter
+   * - sys.modules
+     - Manipulate loaded modules
+   * - sys.path
+     - Modify import path (can load arbitrary code)
+   * - nt
+     - Windows native system calls (like os)
+   * - posix
+     - Unix equivalent of nt
+   * - importlib
+     - Dynamic imports and module loading
+   * - socket
+     - Network access, can open sockets
+   * - selectors
+     - Low-level network/socket multiplexing
+   * - multiprocessing
+     - Starts subprocesses and parallel processes
+   * - threading
+     - Can spawn threads (potential concurrency hazards)
+   * - asyncio
+     - Asynchronous tasks (can be misused)
+   * - ctypes
+     - Load arbitrary C libraries (very risky)
+   * - platform
+     - Access to detailed system info (potential info leak)
+   * - webbrowser
+     - Can open URLs or trigger external browser actions
+   * - shutil
+     - File operations, including deleting files
+   * - tempfile
+     - Temporary files and directories (file system access)
+   * - glob
+     - Wildcard filesystem access
+   * - pathlib
+     - Filesystem path operations (safe if used carefully, but can be risky)
+   * - codecs
+     - Decoding arbitrary formats (rare but possible exploits)
+   * - builtins.eval
+     - Execute arbitrary code from string
+   * - builtins.exec
+     - Execute arbitrary code dynamically
+   * - builtins.open
+     - File open (can read/write files)
+   * - builtins.__import__
+     - Dynamic import of modules
+
 
 .. _security_mechanisms_load:
 

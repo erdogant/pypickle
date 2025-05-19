@@ -40,7 +40,7 @@ def get_risk_modules():
         'subprocess',       # Arbitrary system command execution
         'subprocess.Popen', # Start subprocess with pipe access
         'subprocess.call',  # Run system commands
-        # 'sys',              # System-level operations
+        # 'sys',            # System-level operations
         'sys.exit',         # Exit interpreter
         'sys.modules',      # Manipulate loaded modules
         'sys.path',         # Modify import path (can load arbitrary code)

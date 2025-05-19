@@ -52,7 +52,6 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="general.html">What is pickling?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general.html#data-modules">Data Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="general.html#risk-modules">Risk Modules</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Save and Load</span></p>
 <ul>
@@ -344,7 +343,7 @@ pickle files that contain risky modules, i.e., those that can automatically make
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Example 1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pypickle</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;mydata.pkl&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;model.pkl&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load with validation (default)</span>
@@ -371,9 +370,10 @@ pickle files that contain risky modules, i.e., those that can automatically make
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1">#</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Example 5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">modules_safe</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">validate_modules</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="n">modules_safe</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mods</span> <span class="o">=</span> <span class="n">pypickle</span><span class="o">.</span><span class="n">validate_modules</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="n">mods</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pypickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="s1">&#39;sklearn&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#</span>
 </pre></div>
 </div>
 </dd></dl>

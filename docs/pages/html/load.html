@@ -53,12 +53,12 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="general.html">What is pickling?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general.html#data-modules">Data Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="general.html#risk-modules">Risk Modules</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Save and Load</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="save.html">Save</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Load</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#risk-modules">Risk Modules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#security-mechanisms-load">Security Mechanisms (load)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#load-with-validation">Load with Validation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#load-without-validation">Load without Validation</a></li>
@@ -103,6 +103,123 @@
 <h1>Load<a class="headerlink" href="#load" title="Link to this heading"></a></h1>
 <p>A pickle file is loaded using the function <a class="reference internal" href="pypickle.pypickle.html#pypickle.pypickle.load" title="pypickle.pypickle.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">pypickle.pypickle.load()</span></code></a>.
 Because of security reasons, that are various restrictions for loading.</p>
+<section id="risk-modules">
+<h2>Risk Modules<a class="headerlink" href="#risk-modules" title="Link to this heading"></a></h2>
+<p>Risk modules refer to Python modules that, when deserialized using <code class="docutils literal notranslate"><span class="pre">pickle</span></code>, may execute unintended or harmful code due to their built-in capabilities.
+Modules such as <code class="docutils literal notranslate"><span class="pre">os</span></code>, <code class="docutils literal notranslate"><span class="pre">subprocess</span></code>, <code class="docutils literal notranslate"><span class="pre">sys</span></code>, or custom classes with overridden <code class="docutils literal notranslate"><span class="pre">__reduce__</span></code> or <code class="docutils literal notranslate"><span class="pre">__setstate__</span></code> methods can introduce severe security risks during unpickling.
+These modules are often classified as <em>high-risk</em> because they enable file system access, process execution, or system-level interactions.
+To mitigate these threats, <code class="docutils literal notranslate"><span class="pre">pypickle</span></code> includes validation mechanisms that block or explicitly require user approval for such modules before loading, ensuring safer handling of untrusted pickle files.</p>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Risky Modules Blocked by Default</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Module or Function</p></th>
+<th class="head"><p>Risk / Reason for Blocking</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>os.system</p></td>
+<td><p>Execute shell commands</p></td>
+</tr>
+<tr class="row-odd"><td><p>os.popen</p></td>
+<td><p>Open pipe to or from command</p></td>
+</tr>
+<tr class="row-even"><td><p>os.execve</p></td>
+<td><p>Execute a new program, replacing the current process</p></td>
+</tr>
+<tr class="row-odd"><td><p>os.remove</p></td>
+<td><p>Remove files (can delete data)</p></td>
+</tr>
+<tr class="row-even"><td><p>os.rmdir</p></td>
+<td><p>Remove directories</p></td>
+</tr>
+<tr class="row-odd"><td><p>os.makedirs</p></td>
+<td><p>Make directories (can modify filesystem)</p></td>
+</tr>
+<tr class="row-even"><td><p>subprocess</p></td>
+<td><p>Arbitrary system command execution</p></td>
+</tr>
+<tr class="row-odd"><td><p>subprocess.Popen</p></td>
+<td><p>Start subprocess with pipe access</p></td>
+</tr>
+<tr class="row-even"><td><p>subprocess.call</p></td>
+<td><p>Run system commands</p></td>
+</tr>
+<tr class="row-odd"><td><p>sys.exit</p></td>
+<td><p>Exit interpreter</p></td>
+</tr>
+<tr class="row-even"><td><p>sys.modules</p></td>
+<td><p>Manipulate loaded modules</p></td>
+</tr>
+<tr class="row-odd"><td><p>sys.path</p></td>
+<td><p>Modify import path (can load arbitrary code)</p></td>
+</tr>
+<tr class="row-even"><td><p>nt</p></td>
+<td><p>Windows native system calls (like os)</p></td>
+</tr>
+<tr class="row-odd"><td><p>posix</p></td>
+<td><p>Unix equivalent of nt</p></td>
+</tr>
+<tr class="row-even"><td><p>importlib</p></td>
+<td><p>Dynamic imports and module loading</p></td>
+</tr>
+<tr class="row-odd"><td><p>socket</p></td>
+<td><p>Network access, can open sockets</p></td>
+</tr>
+<tr class="row-even"><td><p>selectors</p></td>
+<td><p>Low-level network/socket multiplexing</p></td>
+</tr>
+<tr class="row-odd"><td><p>multiprocessing</p></td>
+<td><p>Starts subprocesses and parallel processes</p></td>
+</tr>
+<tr class="row-even"><td><p>threading</p></td>
+<td><p>Can spawn threads (potential concurrency hazards)</p></td>
+</tr>
+<tr class="row-odd"><td><p>asyncio</p></td>
+<td><p>Asynchronous tasks (can be misused)</p></td>
+</tr>
+<tr class="row-even"><td><p>ctypes</p></td>
+<td><p>Load arbitrary C libraries (very risky)</p></td>
+</tr>
+<tr class="row-odd"><td><p>platform</p></td>
+<td><p>Access to detailed system info (potential info leak)</p></td>
+</tr>
+<tr class="row-even"><td><p>webbrowser</p></td>
+<td><p>Can open URLs or trigger external browser actions</p></td>
+</tr>
+<tr class="row-odd"><td><p>shutil</p></td>
+<td><p>File operations, including deleting files</p></td>
+</tr>
+<tr class="row-even"><td><p>tempfile</p></td>
+<td><p>Temporary files and directories (file system access)</p></td>
+</tr>
+<tr class="row-odd"><td><p>glob</p></td>
+<td><p>Wildcard filesystem access</p></td>
+</tr>
+<tr class="row-even"><td><p>pathlib</p></td>
+<td><p>Filesystem path operations (safe if used carefully, but can be risky)</p></td>
+</tr>
+<tr class="row-odd"><td><p>codecs</p></td>
+<td><p>Decoding arbitrary formats (rare but possible exploits)</p></td>
+</tr>
+<tr class="row-even"><td><p>builtins.eval</p></td>
+<td><p>Execute arbitrary code from string</p></td>
+</tr>
+<tr class="row-odd"><td><p>builtins.exec</p></td>
+<td><p>Execute arbitrary code dynamically</p></td>
+</tr>
+<tr class="row-even"><td><p>builtins.open</p></td>
+<td><p>File open (can read/write files)</p></td>
+</tr>
+<tr class="row-odd"><td><p>builtins.__import__</p></td>
+<td><p>Dynamic import of modules</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="security-mechanisms-load">
 <span id="id1"></span><h2>Security Mechanisms (load)<a class="headerlink" href="#security-mechanisms-load" title="Link to this heading"></a></h2>
 <p>pickle files are directly loaded if all modules are in the allowlist. If the pickle file contains unknown modules, the modules needs to be validated using the validate parameter.
