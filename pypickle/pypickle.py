@@ -366,7 +366,7 @@ def save(filepath: str,
     try:
         with open(filepath, 'wb') as outfile:
             pickle.dump(var, outfile, fix_imports=fix_imports)
-        logger.info(f'[SUCCES]: Pickle file saved: [{filepath}]')
+        logger.info(f'Pickle file saved: [{filepath}]')
         return True
     except Exception as e:
         logger.error(f'[FAILED]: pickle file is not saved: [{filepath}]. Error: {e}')
@@ -418,7 +418,7 @@ def load(filepath: str,
     --------
     >>> # Example 1
     >>> import pypickle
-    >>> filepath = 'mydata.pkl'
+    >>> filepath = 'model.pkl'
     >>> data = [1, 2, 3]
     >>> status = pypickle.save(filepath, data, overwrite=True)
     >>> # Load with validation (default)
@@ -445,9 +445,10 @@ def load(filepath: str,
     >>> pypickle.load('model.pkl', validate=True)
     >>> #
     >>> # Example 5
-    >>> modules_safe = pypickle.validate_modules('model.pkl')
-    >>> pypickle.load('model.pkl', validate=modules_safe)
+    >>> mods = pypickle.validate_modules('model.pkl')
+    >>> pypickle.load('model.pkl', validate=mods)
     >>> pypickle.load('model.pkl', validate='sklearn')
+    >>> #
 
     """
     # Set the logger
@@ -459,11 +460,11 @@ def load(filepath: str,
 
     # Check file
     if not os.path.isfile(filepath):
-        logger.info(f'Pickle file does not exist: {filepath}')
+        logger.info(f'Pickle file does not exist: [{filepath}]')
         return None
 
     # Loading
-    logger.info(f"Loading Pickle file: {filepath}")
+    logger.info(f"Loading Pickle file: [{filepath}]")
     if isinstance(validate, list) or validate is True:
         # Add custom modules to the defaults
         user_modules = validate + allowlist if isinstance(validate, list) else None
