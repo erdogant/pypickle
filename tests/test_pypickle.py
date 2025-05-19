@@ -80,10 +80,11 @@ def test_load_malicious_pickle():
     assert loaded is None or isinstance(loaded, object)  # validate loader blocks the exploit
 
     # Open after using validation
-    v = pypickle.validate_modules(filepath)
-    status = pypickle.load(filepath, validate=v)
+    mods = pypickle.validate_modules(filepath)
+    status = pypickle.load(filepath, validate=mods)
     assert isinstance(status, int)  # os.system returns exit code (0 or 1)
 
+    
 def test_load_nonexistent_file():
     # Loading a nonexistent file should return None gracefully
     assert pypickle.load('nonexistent_file.pkl') is None
@@ -247,3 +248,22 @@ def test_overwrite_allowed():
         save(filepath, TEST_DATA, overwrite=True)
         save(filepath, {"msg": "updated"}, overwrite=True)
         assert load(filepath) == {"msg": "updated"}
+
+
+def test_load_sys_path_pickle():
+    import sys
+    class InspectSysPath:
+        def __reduce__(self):
+            return (getattr, (sys, 'path'))
+
+    filepath = 'inspect_sys_path.pkl'
+    status = pypickle.save(filepath, InspectSysPath(), overwrite=True)
+    assert not status
+
+    # Try loading with validation — should block access to 'sys.path'
+    # loaded = pypickle.load(filepath, validate=True)
+    # assert isinstance(loaded, object)
+
+    # Allow explicitly and try again
+    # mods = pypickle.validate_modules(filepath)
+    # status = pypickle.load(filepath, validate=mods)
