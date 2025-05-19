@@ -29,27 +29,49 @@ def get_risk_modules():
 
     """
     risk_modules = [
-    'os',             # Shell access, file system, environment
-    'subprocess',     # Can execute arbitrary system commands
-    'sys',            # System-level operations, e.g., path, exit
-    'nt',             # Windows native system calls (like os)
-    'posix',          # Unix equivalent of nt
-    'builtins',       # If abused (e.g., eval, exec); handled separately
-    'importlib',      # Dynamic importing
-    'socket',         # Network access
-    'selectors',      # Low-level network/socket
-    'multiprocessing',# Starts subprocesses
-    'threading',      # Concurrency (can spawn dangerous threads)
-    'asyncio',        # Async tasks (can be misused)
-    'ctypes',         # Can load arbitrary C libraries
-    'platform',       # Access system info
-    'webbrowser',     # Can open URLs or trigger browser actions
-    'shutil',         # File operations, disk wiping
-    'tempfile',       # File system operations
-    'glob',           # Can access wildcards over filesystem
-    'pathlib',        # File access (safe in limited form, but still risky)
-    'codecs',         # Can decode to arbitrary formats (rare exploit)
+        # Risky modules
+        # 'os',               # Shell access, file system, environment manipulation
+        'os.system',        # Execute shell commands
+        'os.popen',         # Open pipe to or from command
+        'os.execve',        # Execute a new program, replacing the current process
+        'os.remove',        # Remove files (can delete data)
+        'os.rmdir',         # Remove directories
+        'os.makedirs',      # Make directories (can modify filesystem)
+        'subprocess',       # Arbitrary system command execution
+        'subprocess.Popen', # Start subprocess with pipe access
+        'subprocess.call',  # Run system commands
+        # 'sys',              # System-level operations
+        'sys.exit',         # Exit interpreter
+        'sys.modules',      # Manipulate loaded modules
+        'sys.path',         # Modify import path (can load arbitrary code)
+
+        # OS/platform-specific modules
+        'nt',               # Windows native system calls (like os)
+        'posix',            # Unix equivalent of nt
+
+        # Other risky modules
+        'importlib',        # Dynamic imports and module loading
+        'socket',           # Network access, can open sockets
+        'selectors',        # Low-level network/socket multiplexing
+        'multiprocessing',  # Starts subprocesses and parallel processes
+        'threading',        # Can spawn threads (potential concurrency hazards)
+        'asyncio',          # Asynchronous tasks (can be misused)
+        'ctypes',           # Load arbitrary C libraries (very risky)
+        'platform',         # Access to detailed system info (potential info leak)
+        'webbrowser',       # Can open URLs or trigger external browser actions
+        'shutil',           # File operations, including deleting files
+        'tempfile',         # Temporary files and directories (file system access)
+        'glob',             # Wildcard filesystem access
+        'pathlib',          # Filesystem path operations (safe if used carefully, but can be risky)
+        'codecs',           # Decoding arbitrary formats (rare but possible exploits)
+
+        # Specific risky functions in builtins (instead of blocking entire builtins module)
+        'builtins.eval',        # Execute arbitrary code from string
+        'builtins.exec',        # Execute arbitrary code dynamically
+        'builtins.open',        # File open (can read/write files)
+        'builtins.__import__',  # Dynamic import of modules
     ]
+
     return risk_modules
 
 
@@ -524,15 +546,24 @@ class ValidateUnpickler(pickle.Unpickler):
         self.validate_modules = validate_modules if validate_modules else []
         self.risky_modules = risky_modules if risky_modules is not None else get_risk_modules()
 
+
     def find_class(self, module, name):
+        full_name = f"{module}.{name}"
         # If module is explicitly validated by the user, allow it
         if any(module == allowed or module.startswith(f"{allowed}.") for allowed in self.validate_modules):
             mod = __import__(module, fromlist=[name])
             return getattr(mod, name)
 
-        # If module is risky, block it
-        if any(module == risky or module.startswith(f"{risky}.") for risky in self.risky_modules):
-            raise pickle.UnpicklingError(f"[BLOCKED] Module '{module}' is considered risky. Use validate=['{module}'] to allow.")
+        # Block risky modules/functions
+        for risky in self.risky_modules:
+            if '.' in risky:
+                # risky is a full function name like 'os.remove'
+                if full_name == risky:
+                    raise pickle.UnpicklingError(f"[BLOCKED] Function '{full_name}' is considered risky. Use validate=['{module}'] to allow.")
+            else:
+                # risky is a module prefix like 'glob' or 'tempfile'
+                if module == risky or module.startswith(f"{risky}."):
+                    raise pickle.UnpicklingError(f"[BLOCKED] Module '{module}' is considered risky. Use validate=['{module}'] to allow.")
 
         # Otherwise allow
         mod = __import__(module, fromlist=[name])
@@ -556,9 +587,16 @@ def validate_modules(filepath: str) -> list:
     list
         List of required module name prefixes (e.g. ['sklearn', 'numpy']).
     """
-    risky_modules = get_risk_modules()
     modules = set()
     stack = []
+
+    if not os.path.isfile(filepath):
+        logger.error('File does not exist: [{filepath}]')
+        return
+
+    # Get risk modules
+    risky_modules = get_risk_modules()
+    modules_set = list({item.split('.')[0] for item in risky_modules if '.' in item})
 
     with open(filepath, 'rb') as f:
         for opcode, arg, _ in pickletools.genops(f):
@@ -569,16 +607,20 @@ def validate_modules(filepath: str) -> list:
                     module, _ = arg.strip().split(' ')
                     modules.add(module)
                     if module in risky_modules:
-                        logger.warning(f"[WARNING] Risky module: {module}")
+                        logger.warning(f"Risky module: {module}")
                 except Exception:
                     continue
             elif opcode.name == 'STACK_GLOBAL':
                 if len(stack) >= 2:
                     name = stack.pop()
                     module = stack.pop()
-                    modules.add(module)
-                    if module in risky_modules:
-                        logger.warning(f"[WARNING] Risky module: {module}.{name}")
+                    full_name = f"{module}.{name}"
+                    if module in modules_set:
+                        modules.add(full_name)
+                    else:
+                        modules.add(module)
+                    if full_name in risky_modules:
+                        logger.warning(f"Risky function: {full_name}")
 
     return sorted(modules)
 
