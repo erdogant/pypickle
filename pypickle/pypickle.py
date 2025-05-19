@@ -520,22 +520,6 @@ def load_and_validate(filepath, fix_imports=True, encoding="ASCII", errors="stri
     return None
 
 
-# %% Custom Unpickler
-# class ValidateUnpickler(pickle.Unpickler):
-#     """Restricted unpickler that prevents loading unsafe modules."""
-#     # default_allowed_modules = get_allowed_modules()
-
-#     def __init__(self, file, validate_modules=None, default_allowed_modules=get_allowed_modules()):
-#         super().__init__(file)
-#         self.allowed_modules = validate_modules if validate_modules else default_allowed_modules
-
-#     def find_class(self, module, name):
-#         if any(module == allowed or module.startswith(f"{allowed}.") for allowed in self.allowed_modules):
-#             mod = __import__(module, fromlist=[name])
-#             return getattr(mod, name)
-#         raise pickle.UnpicklingError(f"Loading '{module}.{name}' is not allowed. Add to pypickle.load(..., validate=['{module}']) to load securily.")
-
-
 #%%
 class ValidateUnpickler(pickle.Unpickler):
     """
