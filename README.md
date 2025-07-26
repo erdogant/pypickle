@@ -33,7 +33,7 @@ Ideal for developers who care about both convenience and peace of mind.
 
 ---
 
-For security reasons, pickle files are validated by checking the inner modules before loading. Twenty modules are classified as high-risk (see [here](https://erdogant.github.io/pypickle/pages/html/Save_and_Load.html#risk-modules)) and can not be loaded without validation.
+For security reasons, pickle files are validated by checking the inner modules before loading. Twenty modules are classified as high-risk (see [here](https://erdogant.github.io/pypickle/pages/html/save.html#security-mechanisms-save)) and can not be loaded without validation.
 
 | Module Type           | Allowed? | How to Change Behavior                                                  |
 |-----------------------|----------|--------------------------------------------------------------------------|
@@ -91,7 +91,7 @@ data = pypickle.load(filepath)
 
 
 ### Contributors
-Setting up and maintaining bnlearn has been possible thanks to users and contributors. Thanks to:
+Special thanks to the contributors!
 
 <p align="left">
   <a href="https://github.com/erdogant/pypickle/graphs/contributors">
@@ -102,7 +102,9 @@ Setting up and maintaining bnlearn has been possible thanks to users and contrib
 ### Maintainer
 * Erdogan Taskesen, github: [erdogant](https://github.com/erdogant)
 * Contributions are welcome.
-* Yes! This library is entirely **free**, but it runs on coffee! :) Feel free to support with a <a href="https://erdogant.github.io/donate/?currency=USD&amount=5">Coffee</a>.
+* Yes! This library is entirely **free** but it runs on coffee! :) Feel free to support with a <a href="https://erdogant.github.io/donate/?currency=USD&amount=5">Coffee</a>.
+
+[![Buy me a coffee](https://img.buymeacoffee.com/button-api/?text=Buy+me+a+coffee&emoji=&slug=erdogant&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff)](https://www.buymeacoffee.com/erdogant)
 
 <a href="https://www.buymeacoffee.com/erdogant"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=erdogant&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
 
