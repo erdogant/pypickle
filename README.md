@@ -87,18 +87,6 @@ data = pypickle.load(filepath)
 
 ```
 
----
-
-
-### Contributors
-Special thanks to the contributors!
-
-<p align="left">
-  <a href="https://github.com/erdogant/pypickle/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=erdogant/pypickle" />
-  </a>
-</p>
-
 ### Maintainer
 * Erdogan Taskesen, github: [erdogant](https://github.com/erdogant)
 * Contributions are welcome.
