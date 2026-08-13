@@ -9,11 +9,10 @@ authors = [{ name = "Erdogan Taskesen", email = "erdogant@gmail.com" }]
 description = "pypickle is a Python library to save and load variables in pickle files."
 readme = "README.md"
 requires-python = ">=3"
-license.file = "LICENSE"
-keywords = ["Python", "pypi", "pickle", "save", "load"]
+license = "MIT"
+keywords = ["python", "pickle", "save", "load", "serialization", "deserialization", "data", "variables"]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Intended Audience :: Education",
     "Intended Audience :: Science/Research",
@@ -21,6 +20,7 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: MacOS",
 ]
+
 dependencies = []
 
 [project.urls]
