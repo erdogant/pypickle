@@ -11,6 +11,13 @@ import tempfile
 # Sample test variable
 TEST_DATA = {"msg": "hello"}
 
+def test_save_to_tmpdir(tmp_path):
+    filepath = str(tmp_path / "test.pkl")
+    data = [1, 2, 3]
+    result = pypickle.save(filepath, data)
+    assert result is True, f"save() returned {result!r} — macOS /private temp path still blocked?"
+    assert os.path.isfile(filepath)
+    
 def test_logger():
     pypickle.check_logger(verbose=0)
     pypickle.check_logger(verbose=20)

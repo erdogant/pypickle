@@ -129,7 +129,8 @@ def get_allowed_paths(custom_path=None):
     ALLOWED_SAVE_PATHS = [
         os.path.abspath(os.getcwd()),           # Current working dir
         os.path.expanduser("~"),                # User's home dir
-        tempfile.gettempdir()                   # OS temp dir
+        os.path.realpath(tempfile.gettempdir()) # OS temp dir
+        # tempfile.gettempdir()                   # OS temp dir
     ]
 
     if isinstance(custom_path, str): custom_path = [custom_path]
@@ -203,7 +204,7 @@ def is_critical_path(filepath: str) -> bool:
     if allowed_subpaths:
         for allowed in allowed_subpaths:
             try:
-                allowed_abs = os.path.abspath(allowed)
+                allowed_abs = os.path.realpath(os.path.abspath(allowed))
                 if os.path.commonpath([abs_path, allowed_abs]) == allowed_abs:
                     return False
             except ValueError:
