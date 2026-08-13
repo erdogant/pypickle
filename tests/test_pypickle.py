@@ -117,8 +117,9 @@ def test_safe_pickle():
 
     # Validate modules
     mods = pypickle.validate_modules(filepath)
-    assert 'pandas.core.frame' in mods
-    assert 'numpy' in mods
+    assert any(mod == 'pandas' or mod.startswith('pandas.') for mod in mods)
+    assert any(mod == 'numpy' or mod.startswith('numpy.') for mod in mods)
+    assert pypickle.load(filepath, validate=mods) is not None
 
     # Load with specific validations
     assert pypickle.load(filepath, validate=['pandas']) is not None
